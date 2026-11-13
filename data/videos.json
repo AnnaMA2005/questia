@@ -1,0 +1,81 @@
+{
+  "_comment": "Lista de DEMOSTRACIÓN de vídeos. La fuente editorial real será la hoja «videos» en Google Sheets (fase 4). Campos según la sección 4 del documento maestro. Identificadores de YouTube verificados el 13/11/2026 contra el canal original (oEmbed). Cada vídeo se revisa antes de publicarlo (contenido, vigencia, canal fiable). Pendiente editorial: añadir al menos un vídeo en castellano de un canal original.",
+  "videos": [
+    {
+      "id": "V-0001",
+      "youtube_id": "wjZofJX0v4M",
+      "canal": "3Blue1Brown",
+      "titulo": {
+        "en": "Transformers, the tech behind LLMs",
+        "ca": "Transformers, la tecnologia darrere dels LLM",
+        "es": "Transformers, la tecnología detrás de los LLM"
+      },
+      "descripcion": {
+        "en": "A visual explanation of how models like GPT turn text into predictions, from the author of the best maths animations on YouTube.",
+        "ca": "Una explicació visual de com models com GPT converteixen text en prediccions, de l'autor de les millors animacions de matemàtiques de YouTube.",
+        "es": "Una explicación visual de cómo modelos como GPT convierten texto en predicciones, del autor de las mejores animaciones de matemáticas de YouTube."
+      },
+      "idioma_video": "en",
+      "categoria": "descubre",
+      "fecha_alta": "2026-11-13",
+      "estado": "publicado"
+    },
+    {
+      "id": "V-0002",
+      "youtube_id": "rhgwIhB58PA",
+      "canal": "Veritasium",
+      "titulo": {
+        "en": "The biggest myth in education",
+        "ca": "El mite més gran de l'educació",
+        "es": "El mito más grande de la educación"
+      },
+      "descripcion": {
+        "en": "Do 'learning styles' (visual, auditory…) exist? What the research actually says, and what works instead.",
+        "ca": "Existeixen els «estils d'aprenentatge» (visual, auditiu…)? Què diu realment la recerca, i què funciona en canvi.",
+        "es": "¿Existen los «estilos de aprendizaje» (visual, auditivo…)? Qué dice realmente la investigación, y qué funciona en su lugar."
+      },
+      "idioma_video": "en",
+      "categoria": "estudio",
+      "fecha_alta": "2026-11-13",
+      "estado": "publicado"
+    },
+    {
+      "id": "V-0003",
+      "youtube_id": "ukLnPbIffxE",
+      "canal": "Ali Abdaal",
+      "titulo": {
+        "en": "How to study for exams: evidence-based tips",
+        "ca": "Com estudiar per als exàmens: consells amb evidència",
+        "es": "Cómo estudiar para los exámenes: consejos con evidencia"
+      },
+      "descripcion": {
+        "en": "Active recall and spaced repetition explained by a former medical student, with the studies behind them.",
+        "ca": "Recuperació activa i repetició espaiada explicades per un exestudiant de medicina, amb els estudis que les avalen.",
+        "es": "Recuperación activa y repetición espaciada explicadas por un exestudiante de medicina, con los estudios que las respaldan."
+      },
+      "idioma_video": "en",
+      "categoria": "estudio",
+      "fecha_alta": "2026-11-13",
+      "estado": "publicado"
+    },
+    {
+      "id": "V-0004",
+      "youtube_id": "0fJta4HLRJo",
+      "canal": "Universitat Politècnica de Catalunya",
+      "titulo": {
+        "en": "What should we know about artificial intelligence?",
+        "ca": "Què hem de saber sobre la intel·ligència artificial?",
+        "es": "¿Qué debemos saber sobre la inteligencia artificial?"
+      },
+      "descripcion": {
+        "en": "A university talk, in Catalan, on what AI is, what it can and cannot do, and the questions it raises.",
+        "ca": "Una xerrada universitària sobre què és la IA, què pot fer i què no, i les preguntes que planteja.",
+        "es": "Una charla universitaria, en catalán, sobre qué es la IA, qué puede hacer y qué no, y las preguntas que plantea."
+      },
+      "idioma_video": "ca",
+      "categoria": "descubre",
+      "fecha_alta": "2026-11-13",
+      "estado": "publicado"
+    }
+  ]
+}

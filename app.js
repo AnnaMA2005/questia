@@ -1,14 +1,17 @@
-/* QuestIA — lógica de la app (fase 3, entrega 1).
+/* QuestIA — lógica de la app (fase 3).
    Módulos en este archivo: idioma, rutas (#inicio, #retos, #videos, #encuesta, #reto/ID),
-   catálogo y reto del día, recorrido del reto, progreso con calendario, service worker.
+   catálogo y reto del día, recorrido del reto, progreso con calendario, pestaña Retos con filtros,
+   vídeos, tarjeta de instalación, service worker.
    Cuando crezca, se separará en quests.js / progress.js / etc. (sección 10 del documento maestro). */
 
 (function () {
   "use strict";
 
-  var APP_VERSION = "0.3.1";
+  var APP_VERSION = "0.3.2";
   var STORAGE_LANG = "questia.lang";
   var STORAGE_PROGRESS = "questia.progress";
+  var STORAGE_INSTALL_DISMISSED = "questia.installDismissed";
+  var INSTALL_DISMISS_DAYS = 7;
   var TIMEZONE = "Europe/Madrid";
 
   var I18N = window.QUESTIA_I18N;
@@ -16,6 +19,8 @@
   var currentLang = null;
 
   var catalog = { quests: [], loaded: false, error: false };
+  var videos = { items: [], loaded: false, error: false };
+  var filters = { questCat: "all", videoCat: "all", videoLang: "all" };
   var progress = loadProgress();
 
   /* =========================================================
@@ -146,6 +151,18 @@
         catalog.error = true;
         render();
       });
+  }
+
+  function loadVideos() {
+    fetch("data/videos.json", { cache: "no-cache" })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (json) {
+        videos.items = (Array.isArray(json.videos) ? json.videos : []).filter(function (v) { return v.estado === "publicado" && v.youtube_id; })
+          .sort(function (a, b) { return a.fecha_alta < b.fecha_alta ? 1 : -1; });
+        videos.loaded = true;
+        render();
+      })
+      .catch(function () { videos.error = true; render(); });
   }
 
   /* Simulación local de la selección en servidor: solo publicados con fecha ≤ hoy. */
@@ -426,6 +443,171 @@
   }
 
   /* =========================================================
+     Render: pestaña Retos
+     ========================================================= */
+
+  var CATEGORIES = [["mente", "catMente"], ["estudio", "catEstudio"], ["descubre", "catDescubre"]];
+
+  function renderFilterChips(container, options, current, onPick) {
+    clear(container);
+    [["all", t("filterAll")]].concat(options).forEach(function (opt) {
+      container.appendChild(el("button", {
+        type: "button", class: "filter-btn", text: opt[1],
+        "aria-pressed": current === opt[0] ? "true" : "false",
+        onclick: function () { onPick(opt[0]); }
+      }));
+    });
+  }
+
+  function renderQuestsTab() {
+    var filtersBox = document.getElementById("quest-filters");
+    var list = document.getElementById("quests-list");
+    if (!filtersBox || !list) return;
+    renderFilterChips(filtersBox, CATEGORIES.map(function (c) { return [c[0], t(c[1])]; }), filters.questCat, function (v) { filters.questCat = v; renderQuestsTab(); });
+
+    clear(list);
+    if (catalog.error) { list.appendChild(el("li", { class: "notice", text: t("loadError") })); return; }
+    if (!catalog.loaded) return;
+    var today = todayISO();
+    var items = availableQuests().filter(function (q) { return filters.questCat === "all" || q.categoria === filters.questCat; });
+    if (!items.length) { list.appendChild(el("li", { class: "muted", text: t("noQuestsFilter") })); return; }
+    items.forEach(function (q) {
+      var catKey = { mente: "catMente", estudio: "catEstudio", descubre: "catDescubre" }[q.categoria] || "catMente";
+      list.appendChild(el("li", null, [
+        el("a", { class: "quest-item", href: "#reto/" + q.id }, [
+          el("span", { class: "quest-title" }, [
+            tc(q.titulo),
+            el("span", { class: "chip chip-cat", style: "margin-left:8px", text: t(catKey) })
+          ]),
+          el("span", { class: "quest-date", text: q.fecha_publicacion === today ? t("todayQuest") : formatDate(q.fecha_publicacion) }),
+          progress.solved[q.id] ? el("span", { class: "quest-check", "aria-label": t("solvedBadge"), text: "✓" }) : null
+        ])
+      ]));
+    });
+  }
+
+  /* =========================================================
+     Render: vídeos
+     ========================================================= */
+
+  var VIDEO_LANGS = [["en", "videoLang_en"], ["ca", "videoLang_ca"], ["es", "videoLang_es"]];
+
+  function renderVideos() {
+    var catBox = document.getElementById("video-filters-cat");
+    var langBox = document.getElementById("video-filters-lang");
+    var list = document.getElementById("videos-list");
+    if (!catBox || !langBox || !list) return;
+    renderFilterChips(catBox, CATEGORIES.map(function (c) { return [c[0], t(c[1])]; }), filters.videoCat, function (v) { filters.videoCat = v; renderVideos(); });
+    renderFilterChips(langBox, VIDEO_LANGS.map(function (l) { return [l[0], t(l[1])]; }), filters.videoLang, function (v) { filters.videoLang = v; renderVideos(); });
+
+    clear(list);
+    if (videos.error) { list.appendChild(el("p", { class: "notice", text: t("loadError") })); return; }
+    if (!videos.loaded) return;
+    var items = videos.items.filter(function (v) {
+      return (filters.videoCat === "all" || v.categoria === filters.videoCat) &&
+             (filters.videoLang === "all" || v.idioma_video === filters.videoLang);
+    });
+    if (!items.length) { list.appendChild(el("p", { class: "muted", text: t("noVideosFilter") })); return; }
+    items.forEach(function (v) { list.appendChild(videoCard(v)); });
+  }
+
+  function videoCard(v) {
+    var catKey = { mente: "catMente", estudio: "catEstudio", descubre: "catDescubre" }[v.categoria] || "catDescubre";
+    var langKey = "videoLang_" + v.idioma_video;
+    var title = tc(v.titulo);
+    var media = el("div", { class: "video-media" }, [
+      el("img", { src: "https://i.ytimg.com/vi/" + encodeURIComponent(v.youtube_id) + "/hqdefault.jpg", alt: "", loading: "lazy", width: "480", height: "360" }),
+      el("button", {
+        type: "button", class: "video-play", "aria-label": t("playVideo") + ": " + title,
+        onclick: function () { playVideo(media, v, title); }
+      }, [el("span", { html: '<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>' })])
+    ]);
+    return el("article", { class: "card video-card" }, [
+      media,
+      el("div", { class: "video-body" }, [
+        el("h2", { text: title }),
+        el("ul", { class: "meta" }, [
+          el("li", { class: "chip chip-cat", text: t(catKey) }),
+          el("li", { class: "chip", text: t(langKey) })
+        ]),
+        el("p", { class: "muted", text: tc(v.descripcion) }),
+        el("p", { class: "video-channel" }, [
+          v.canal + " · ",
+          el("a", { href: "https://www.youtube.com/watch?v=" + encodeURIComponent(v.youtube_id), target: "_blank", rel: "noopener noreferrer", text: t("openOnYoutube") })
+        ])
+      ])
+    ]);
+  }
+
+  /* El reproductor (youtube-nocookie.com) solo se carga al pulsar: hasta entonces no se envía nada a YouTube
+     salvo la miniatura. */
+  function playVideo(media, v, title) {
+    clear(media);
+    media.appendChild(el("iframe", {
+      src: "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(v.youtube_id) + "?autoplay=1&rel=0",
+      title: title, allow: "autoplay; encrypted-media; picture-in-picture", allowfullscreen: "", loading: "eager"
+    }));
+    /* Fase 5: aquí se registrará el evento video_open. */
+  }
+
+  /* =========================================================
+     Tarjeta de instalación (PWA)
+     ========================================================= */
+
+  var deferredInstallPrompt = null;
+
+  function isStandalone() {
+    return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+      window.navigator.standalone === true;
+  }
+
+  function isIOS() {
+    var ua = navigator.userAgent || "";
+    return /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  }
+
+  function installDismissed() {
+    var until = Number(storageGet(STORAGE_INSTALL_DISMISSED) || 0);
+    return until > Date.now();
+  }
+
+  function renderInstallCard() {
+    var card = document.getElementById("install-card");
+    if (!card) return;
+    var btn = document.getElementById("install-btn");
+    var ios = document.getElementById("install-ios");
+    var show = !isStandalone() && !installDismissed() && (deferredInstallPrompt || isIOS());
+    card.hidden = !show;
+    if (!show) return;
+    btn.hidden = !deferredInstallPrompt;
+    ios.hidden = !!deferredInstallPrompt || !isIOS();
+  }
+
+  function setupInstall() {
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      renderInstallCard();
+    });
+    window.addEventListener("appinstalled", function () {
+      deferredInstallPrompt = null;
+      renderInstallCard();
+      /* Fase 5: aquí se registrará el evento install. */
+    });
+    var btn = document.getElementById("install-btn");
+    if (btn) btn.addEventListener("click", function () {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      deferredInstallPrompt.userChoice.then(function () { deferredInstallPrompt = null; renderInstallCard(); });
+    });
+    var dismiss = document.getElementById("install-dismiss");
+    if (dismiss) dismiss.addEventListener("click", function () {
+      storageSet(STORAGE_INSTALL_DISMISSED, String(Date.now() + INSTALL_DISMISS_DAYS * 86400000));
+      renderInstallCard();
+    });
+  }
+
+  /* =========================================================
      Rutas y render general
      ========================================================= */
 
@@ -452,6 +634,9 @@
     renderToday();
     renderProgress();
     renderPrevious();
+    renderInstallCard();
+    if (route.view === "retos") renderQuestsTab();
+    if (route.view === "videos") renderVideos();
     if (route.view === "reto") renderQuest(route.param);
     document.getElementById("app-version").textContent = "QuestIA v" + APP_VERSION;
   }
@@ -493,8 +678,10 @@
       btn.addEventListener("click", function () { applyLang(btn.getAttribute("data-lang")); });
     });
     window.addEventListener("hashchange", onRouteChange);
+    setupInstall();
     applyLang(detectLang());
     loadCatalog();
+    loadVideos();
     registerServiceWorker();
   }
 

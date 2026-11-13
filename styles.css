@@ -237,3 +237,49 @@ p:last-child { margin-bottom: 0; }
 @media (prefers-reduced-motion: no-preference) {
   .lang-btn, .nav-item, .option, .btn { transition: background-color 0.15s, color 0.15s, border-color 0.15s; }
 }
+
+/* ---------- Filtros (chips seleccionables) ---------- */
+.filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+.filter-btn {
+  min-height: 36px; padding: 6px 14px;
+  border: 2px solid var(--color-border); border-radius: 999px;
+  background: #fff; color: var(--color-text-muted);
+  font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+}
+.filter-btn[aria-pressed="true"] { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+
+/* ---------- Vídeos ---------- */
+.video-list { display: grid; gap: 16px; }
+.video-card { padding: 0; overflow: hidden; }
+.video-media { position: relative; aspect-ratio: 16 / 9; background: #1F2933; }
+.video-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.video-media iframe { width: 100%; height: 100%; border: 0; display: block; }
+.video-play {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  border: 0; background: rgba(31, 41, 51, 0.15); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.video-play:hover { background: rgba(31, 41, 51, 0.3); }
+.video-play span {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--color-primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+.video-body { padding: 16px 20px 20px; }
+.video-body h2 { font-size: 1.05rem; margin-bottom: 6px; }
+.video-body .meta { margin-bottom: 8px; }
+.video-body .muted { margin-bottom: 8px; }
+.video-channel { font-size: 0.85rem; color: var(--color-text-muted); }
+.video-channel a { font-weight: 600; }
+
+/* ---------- Encuesta ---------- */
+.survey-facts { margin: 0 0 8px; padding: 0; list-style: none; display: grid; gap: 6px; }
+.survey-facts li { padding-left: 26px; position: relative; }
+.survey-facts li::before { content: "✓"; position: absolute; left: 4px; color: var(--color-success); font-weight: 700; }
+
+/* ---------- Instalación ---------- */
+.card-install { border-left: 6px solid var(--color-accent); }
+.install-steps { margin: 0; padding-left: 22px; display: grid; gap: 4px; }
+.install-steps li { padding-left: 4px; }
+.ios-share { vertical-align: -4px; color: var(--color-primary); }

@@ -15,7 +15,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="QuestIA">
 
-  <link rel="stylesheet" href="styles.css?v=0.3.1">
+  <link rel="stylesheet" href="styles.css?v=0.3.2">
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skipToContent">Saltar al contenido</a>
@@ -49,6 +49,21 @@
         <div class="calendar" id="calendar" role="img"></div>
       </article>
 
+      <article class="card card-install" id="install-card" hidden>
+        <h2 data-i18n="installTitle">Lleva QuestIA contigo</h2>
+        <p data-i18n="installBody">Instálala como aplicación: se abre desde la pantalla de inicio, a pantalla completa y funciona sin conexión.</p>
+        <div id="install-ios" hidden>
+          <ol class="install-steps">
+            <li><span data-i18n="installIos1">Pulsa el botón de compartir</span> <svg class="ios-share" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3l4 4h-3v8h-2V7H8l4-4zM5 11h3v2H7v8h10v-8h-1v-2h3v12H5z" fill="currentColor"/></svg></li>
+            <li data-i18n="installIos2">Elige «Añadir a pantalla de inicio»</li>
+          </ol>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="install-btn" hidden data-i18n="installBtn">Instalar</button>
+          <button type="button" class="btn btn-ghost" id="install-dismiss" data-i18n="installLater">Ahora no</button>
+        </div>
+      </article>
+
       <article class="card" aria-labelledby="previous-title">
         <h2 id="previous-title" data-i18n="previousQuests">Retos anteriores</h2>
         <ul class="quest-list" id="previous-list"></ul>
@@ -69,28 +84,39 @@
 
     <!-- ===== Retos (próximamente) ===== -->
     <section class="view" data-view="retos" hidden>
-      <article class="card card-soon">
-        <p class="eyebrow" data-i18n="comingSoon">Próximamente</p>
+      <article class="card">
         <h1 data-i18n="navQuests">Retos</h1>
-        <p data-i18n="soonQuests">Aquí encontrarás todos los retos por categoría: Mente, Estudio y Descubre. Llegará en la siguiente entrega.</p>
+        <p class="muted" data-i18n="questsIntro">Todos los retos publicados hasta hoy. Puedes resolverlos cuando quieras.</p>
+        <div class="filters" role="group" aria-label="Categoría" data-i18n-aria="filterCategory" id="quest-filters"></div>
+        <ul class="quest-list" id="quests-list"></ul>
       </article>
     </section>
 
     <!-- ===== Vídeos (próximamente) ===== -->
     <section class="view" data-view="videos" hidden>
-      <article class="card card-soon">
-        <p class="eyebrow" data-i18n="comingSoon">Próximamente</p>
+      <article class="card">
         <h1 data-i18n="navVideos">Vídeos</h1>
-        <p data-i18n="soonVideos">Una selección de vídeos de interés académico sobre IA, ciencia y método de estudio. Llegará en la siguiente entrega.</p>
+        <p class="muted" data-i18n="videosIntro">Una selección revisada de vídeos sobre IA, ciencia y cómo estudiar mejor. El reproductor solo se carga cuando pulsas.</p>
+        <div class="filters" role="group" aria-label="Categoría" data-i18n-aria="filterCategory" id="video-filters-cat"></div>
+        <div class="filters" role="group" aria-label="Idioma del vídeo" data-i18n-aria="filterLang" id="video-filters-lang"></div>
       </article>
+      <div class="video-list" id="videos-list"></div>
     </section>
 
     <!-- ===== Encuesta (marcador de posición) ===== -->
     <section class="view" data-view="encuesta" hidden>
-      <article class="card card-soon">
-        <p class="eyebrow" data-i18n="comingSoon">Próximamente</p>
-        <h1 data-i18n="navSurvey">Encuesta</h1>
-        <p data-i18n="soonSurvey">La encuesta del TFG sobre IA generativa en la universidad se abrirá aquí cuando esté lista. Es anónima y se podrá responder desde el navegador, sin instalar nada.</p>
+      <article class="card card-today">
+        <p class="eyebrow" data-i18n="surveyEyebrow">Estudio universitario</p>
+        <h1 data-i18n="surveyTitle">La IA generativa en la universidad</h1>
+        <p data-i18n="surveyLead">Una encuesta breve y anónima sobre cómo usamos herramientas como ChatGPT en los estudios y qué pensamos de ellas. Forma parte de un trabajo de fin de grado.</p>
+        <ul class="survey-facts">
+          <li data-i18n="surveyFact1">Sin nombre, correo ni datos personales</li>
+          <li data-i18n="surveyFact2">Se responde desde el navegador, sin instalar nada</li>
+          <li data-i18n="surveyFact3">Los resultados agregados se publicarán aquí mismo</li>
+        </ul>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" disabled data-i18n="surveySoonBtn">Disponible próximamente</button>
+        </div>
       </article>
     </section>
 
@@ -104,7 +130,7 @@
     <a href="#encuesta" class="nav-item" data-nav="encuesta"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm2 5v2h8V8zm0 4v2h8v-2zm0 4v2h5v-2z" fill="currentColor"/></svg></span><span data-i18n="navSurvey">Encuesta</span></a>
   </nav>
 
-  <script src="i18n.js?v=0.3.1"></script>
-  <script src="app.js?v=0.3.1"></script>
+  <script src="i18n.js?v=0.3.2"></script>
+  <script src="app.js?v=0.3.2"></script>
 </body>
 </html>

@@ -19,6 +19,7 @@ service-worker.js     Caché de la interfaz (cambiar CACHE_VERSION en cada publi
 icon.svg              Icono vectorial
 icons/                Iconos PNG 192 y 512 px
 data/quests.json      Catálogo de retos de demostración (solo prototipo y respaldo)
+data/videos.json      Lista de vídeos de demostración (simula la hoja «videos»)
 docs/                 Documentación técnica y editorial
 ```
 
@@ -34,4 +35,4 @@ y abrir http://localhost:8080/ en el navegador. El service worker solo se regist
 
 ## Estado
 
-Fase 3, entrega 1 (v0.3.1): Inicio con reto del día, recorrido completo del reto, progreso con calendario y navegación definitiva de cuatro pestañas (Inicio, Retos, Vídeos, Encuesta). Pendiente la entrega 2: Retos con filtros, Vídeos y Encuesta.
+Fase 3 completa (v0.3.2): Inicio con reto del día, recorrido del reto, progreso con calendario, pestaña Retos con filtros, pestaña Vídeos (lista demo), Encuesta como marcador de posición, tarjeta de instalación. Siguiente: fase 4 (Google Sheets + Apps Script).

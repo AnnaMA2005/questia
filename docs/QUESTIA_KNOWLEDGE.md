@@ -14,6 +14,10 @@ Este documento recoge lo que cualquier persona (o asistente) necesita para traba
 | Recorrido del reto | Enunciado → hasta 2 pistas progresivas → respuesta (opciones o texto corto) → resultado → explicación → curiosidad → fuente. | `app.js` (`renderQuest`) |
 | Progreso | En el dispositivo (`localStorage` `questia.progress`): `{solved: {ID: {date, correct}}}`. Un reto cuenta una sola vez aunque se repita. Contador y calendario mensual de días resueltos. Sin puntos, rachas ni push (aprobado 13/11/2026). | `app.js` (`markSolved`, `renderCalendar`) |
 | Accesibilidad | Enlace «saltar al contenido», foco visible, controles de mínimo 44 px, `aria-pressed` en idioma y opciones, `aria-current` en navegación, resultado como `role="status"` con foco al responder. | `index.html`, `styles.css`, `app.js` |
+| Pestaña Retos | Catálogo disponible (publicados ≤ hoy) con filtros por categoría y marca de resuelto. | `app.js` (`renderQuestsTab`) |
+| Vídeos | `data/videos.json` (simula la hoja «videos»): tarjetas con miniatura de `i.ytimg.com`, filtros por categoría e idioma del vídeo, orden por `fecha_alta`. El reproductor (`youtube-nocookie.com/embed`) solo se inserta al pulsar. IDs verificados contra el canal original antes de publicar. | `data/videos.json`, `app.js` (`renderVideos`, `playVideo`) |
+| Encuesta | Marcador de posición con texto informativo y botón desactivado hasta la fase 5. | `index.html` |
+| Instalación | Tarjeta en Inicio: con `beforeinstallprompt` (Android, Chrome/Edge) muestra botón «Instalar»; en iOS/iPadOS (sin API) muestra guía de dos pasos; oculta si ya está en modo instalado; «Ahora no» la silencia 7 días (`questia.installDismissed`). | `app.js` (`setupInstall`, `renderInstallCard`) |
 | Icono | Chispa blanca de cuatro puntas con chispa menor sobre degradado naranja (aprobado 13/11/2026). | `icon.svg`, `icons/` |
 | PWA y caché | `manifest.json` con `start_url` y `scope` relativos. Service worker: página y `data/*.json` por red saltando la caché HTTP (caché propia si falla); css/js/iconos versionados con `?v=` y servidos desde caché. Al activarse una versión nueva, la página se recarga una vez (`controllerchange`). Motivo: GitHub Pages cachea 10 min por archivo y sin esto se mezclaban versiones (visto el 13/11/2026). | `manifest.json`, `service-worker.js`, `app.js` |
 | Versionado | **En cada publicación cambiar tres cosas:** `APP_VERSION` en `app.js`, `CACHE_VERSION` y la lista `APP_SHELL` en `service-worker.js`, y el sufijo `?v=` de css/js (e icono si cambia) en `index.html`. | `app.js`, `service-worker.js`, `index.html` |
@@ -32,11 +36,11 @@ Este documento recoge lo que cualquier persona (o asistente) necesita para traba
 1. Local: `python3 -m http.server 8080` en la raíz y abrir `http://localhost:8080/`.
 2. Publicado: https://annama2005.github.io/questia/ (puede tardar 1–3 minutos tras cada subida).
 3. Recorrido mínimo: cambiar de idioma en la cabecera → «Empezar» en el reto del día → pedir una pista → elegir respuesta → «Comprobar» → leer explicación → «Terminar» → comprobar que el contador y el calendario marcan el día.
-4. Para reiniciar el progreso en un dispositivo: borrar datos del sitio (o en consola `localStorage.removeItem("questia.progress")`).
+4. Para reiniciar el progreso en un dispositivo: borrar datos del sitio (o en consola `localStorage.removeItem("questia.progress")`; para volver a ver la tarjeta de instalación, `localStorage.removeItem("questia.installDismissed")`).
 5. Para forzar una actualización: cerrar todas las pestañas de la app y volver a abrir; si no, borrar datos del sitio.
 
 ## Historial de fases
 
 - **Fase 2 — Entorno (cerrada el 13/11/2026):** archivos base publicados en GitHub Pages y verificados (v0.2.0).
 - **Fase 3 — Prototipo de frontend, entrega 1 (v0.3.0, parche v0.3.1):** Inicio con reto del día, recorrido completo del reto, progreso con calendario, navegación definitiva de cuatro pestañas (Retos, Vídeos y Encuesta como «próximamente»), icono definitivo.
-- **Fase 3 — Entrega 2 (prevista, v0.3.2):** pestaña Retos con filtros, pestaña Vídeos, pestaña Encuesta de marcador de posición mejorada.
+- **Fase 3 — Entrega 2 (v0.3.2):** pestaña Retos con filtros, pestaña Vídeos con lista demo verificada, pestaña Encuesta como marcador de posición, tarjeta de instalación. Pendiente editorial: un vídeo en castellano de canal original.
