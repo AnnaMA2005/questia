@@ -6,7 +6,7 @@
 (function () {
   "use strict";
 
-  var APP_VERSION = "0.3.0";
+  var APP_VERSION = "0.3.1";
   var STORAGE_LANG = "questia.lang";
   var STORAGE_PROGRESS = "questia.progress";
   var TIMEZONE = "Europe/Madrid";
@@ -470,7 +470,18 @@
 
   function registerServiceWorker() {
     if (!("serviceWorker" in navigator)) return;
-    navigator.serviceWorker.register("service-worker.js").catch(function () { /* sin SW: la app sigue funcionando en línea */ });
+
+    /* Cuando un service worker nuevo toma el control (versión nueva publicada),
+       la página se recarga una sola vez para que HTML, CSS y JS sean de la misma versión. */
+    var hadController = !!navigator.serviceWorker.controller;
+    var reloaded = false;
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+      if (hadController && !reloaded) { reloaded = true; location.reload(); }
+    });
+
+    navigator.serviceWorker.register("service-worker.js", { updateViaCache: "none" })
+      .then(function (reg) { if (reg.update) reg.update(); })
+      .catch(function () { /* sin SW: la app sigue funcionando en línea */ });
   }
 
   /* =========================================================

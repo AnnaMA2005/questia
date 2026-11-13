@@ -15,8 +15,8 @@ Este documento recoge lo que cualquier persona (o asistente) necesita para traba
 | Progreso | En el dispositivo (`localStorage` `questia.progress`): `{solved: {ID: {date, correct}}}`. Un reto cuenta una sola vez aunque se repita. Contador y calendario mensual de días resueltos. Sin puntos, rachas ni push (aprobado 13/11/2026). | `app.js` (`markSolved`, `renderCalendar`) |
 | Accesibilidad | Enlace «saltar al contenido», foco visible, controles de mínimo 44 px, `aria-pressed` en idioma y opciones, `aria-current` en navegación, resultado como `role="status"` con foco al responder. | `index.html`, `styles.css`, `app.js` |
 | Icono | Chispa blanca de cuatro puntas con chispa menor sobre degradado naranja (aprobado 13/11/2026). | `icon.svg`, `icons/` |
-| PWA | `manifest.json` con `start_url` y `scope` relativos. Service worker «red primero, caché si falla». | `manifest.json`, `service-worker.js` |
-| Versionado | `APP_VERSION` en `app.js` y `CACHE_VERSION` en `service-worker.js`. **Cambiar ambos en cada publicación.** | `app.js`, `service-worker.js` |
+| PWA y caché | `manifest.json` con `start_url` y `scope` relativos. Service worker: página y `data/*.json` por red saltando la caché HTTP (caché propia si falla); css/js/iconos versionados con `?v=` y servidos desde caché. Al activarse una versión nueva, la página se recarga una vez (`controllerchange`). Motivo: GitHub Pages cachea 10 min por archivo y sin esto se mezclaban versiones (visto el 13/11/2026). | `manifest.json`, `service-worker.js`, `app.js` |
+| Versionado | **En cada publicación cambiar tres cosas:** `APP_VERSION` en `app.js`, `CACHE_VERSION` y la lista `APP_SHELL` en `service-worker.js`, y el sufijo `?v=` de css/js (e icono si cambia) en `index.html`. | `app.js`, `service-worker.js`, `index.html` |
 
 ## Convenciones
 
@@ -38,5 +38,5 @@ Este documento recoge lo que cualquier persona (o asistente) necesita para traba
 ## Historial de fases
 
 - **Fase 2 — Entorno (cerrada el 13/11/2026):** archivos base publicados en GitHub Pages y verificados (v0.2.0).
-- **Fase 3 — Prototipo de frontend, entrega 1 (v0.3.0):** Inicio con reto del día, recorrido completo del reto, progreso con calendario, navegación definitiva de cuatro pestañas (Retos, Vídeos y Encuesta como «próximamente»), icono definitivo.
-- **Fase 3 — Entrega 2 (prevista, v0.3.1):** pestaña Retos con filtros, pestaña Vídeos, pestaña Encuesta de marcador de posición mejorada.
+- **Fase 3 — Prototipo de frontend, entrega 1 (v0.3.0, parche v0.3.1):** Inicio con reto del día, recorrido completo del reto, progreso con calendario, navegación definitiva de cuatro pestañas (Retos, Vídeos y Encuesta como «próximamente»), icono definitivo.
+- **Fase 3 — Entrega 2 (prevista, v0.3.2):** pestaña Retos con filtros, pestaña Vídeos, pestaña Encuesta de marcador de posición mejorada.

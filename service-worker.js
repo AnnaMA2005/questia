@@ -1,15 +1,22 @@
-/* QuestIA — service worker (fase 2: caché mínima de la interfaz).
-   Cada publicación nueva debe cambiar CACHE_VERSION para que los dispositivos reciban la actualización. */
+/* QuestIA — service worker.
+   En cada publicación: cambiar CACHE_VERSION aquí, APP_VERSION en app.js y el sufijo ?v= de los
+   archivos en index.html. Así la página y sus recursos cambian siempre a la vez.
 
-var CACHE_VERSION = "questia-v0.3.0";
+   Estrategia:
+   - Navegaciones (index.html): red primero SALTANDO la caché HTTP del navegador; si falla, caché.
+   - data/*.json: red primero saltando la caché HTTP; si falla, caché (último catálogo recibido).
+   - Resto de recursos propios (css, js, iconos, versionados con ?v=): caché primero; si no están, red.
+   Cuando se instala una versión nueva, toma el control enseguida y la app se recarga una vez. */
+
+var CACHE_VERSION = "questia-v0.3.1";
 var APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css",
-  "./app.js",
-  "./i18n.js",
+  "./styles.css?v=0.3.1",
+  "./app.js?v=0.3.1",
+  "./i18n.js?v=0.3.1",
   "./manifest.json",
-  "./icon.svg",
+  "./icon.svg?v=2",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./data/quests.json"
@@ -18,10 +25,14 @@ var APP_SHELL = [
 self.addEventListener("install", function (event) {
   event.waitUntil(
     caches.open(CACHE_VERSION).then(function (cache) {
-      return cache.addAll(APP_SHELL);
-    }).then(function () {
-      return self.skipWaiting();
-    })
+      /* cache: "reload" evita que la precarga lea versiones viejas de la caché HTTP */
+      return Promise.all(APP_SHELL.map(function (url) {
+        return fetch(url, { cache: "reload" }).then(function (res) {
+          if (!res.ok) throw new Error(url + " " + res.status);
+          return cache.put(url, res);
+        });
+      }));
+    }).then(function () { return self.skipWaiting(); })
   );
 });
 
@@ -31,30 +42,43 @@ self.addEventListener("activate", function (event) {
       return Promise.all(keys.map(function (key) {
         if (key !== CACHE_VERSION) return caches.delete(key);
       }));
-    }).then(function () {
-      return self.clients.claim();
-    })
+    }).then(function () { return self.clients.claim(); })
   );
 });
 
-/* Estrategia: red primero y, si falla, caché (así el contenido se actualiza cuando hay conexión
-   y la app sigue abriéndose sin conexión). En fases posteriores los datos del servidor
-   tendrán su propia política de caché. */
 self.addEventListener("fetch", function (event) {
-  if (event.request.method !== "GET") return;
-  var url = new URL(event.request.url);
+  var req = event.request;
+  if (req.method !== "GET") return;
+  var url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
+  var isNavigation = req.mode === "navigate";
+  var isData = url.pathname.indexOf("/data/") !== -1;
+
+  if (isNavigation || isData) {
+    event.respondWith(
+      fetch(req, { cache: "no-cache" }).then(function (res) {
+        if (res && res.ok) {
+          var copy = res.clone();
+          caches.open(CACHE_VERSION).then(function (cache) { cache.put(isNavigation ? "./index.html" : req, copy); });
+        }
+        return res;
+      }).catch(function () {
+        return caches.match(isNavigation ? "./index.html" : req);
+      })
+    );
+    return;
+  }
+
   event.respondWith(
-    fetch(event.request).then(function (response) {
-      if (response && response.ok) {
-        var copy = response.clone();
-        caches.open(CACHE_VERSION).then(function (cache) { cache.put(event.request, copy); });
-      }
-      return response;
-    }).catch(function () {
-      return caches.match(event.request).then(function (cached) {
-        return cached || caches.match("./index.html");
+    caches.match(req).then(function (cached) {
+      if (cached) return cached;
+      return fetch(req).then(function (res) {
+        if (res && res.ok) {
+          var copy = res.clone();
+          caches.open(CACHE_VERSION).then(function (cache) { cache.put(req, copy); });
+        }
+        return res;
       });
     })
   );
