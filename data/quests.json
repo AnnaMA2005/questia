@@ -1,0 +1,144 @@
+{
+  "_comment": "Catálogo de DEMOSTRACIÓN para el prototipo y respaldo si el servidor falla. La fuente editorial real es la hoja «quests» en Google Sheets (fase 4). Campos según la sección 5 del documento maestro.",
+  "generated": "2026-10-31",
+  "quests": [
+    {
+      "id": "CQ-0001",
+      "fecha_publicacion": "2026-10-31",
+      "estado": "publicado",
+      "categoria": "mente",
+      "dificultad": 1,
+      "minutos": 2,
+      "tipo": "verdadero-falso",
+      "titulo": {
+        "en": "Does the model know it is wrong?",
+        "ca": "El model sap que s'equivoca?",
+        "es": "¿Sabe el modelo que se equivoca?"
+      },
+      "enunciado": {
+        "en": "A language model can state a false fact with the same confidence as a true one.",
+        "ca": "Un model de llenguatge pot afirmar una dada falsa amb la mateixa seguretat que una de certa.",
+        "es": "Un modelo de lenguaje puede afirmar un dato falso con la misma seguridad que uno cierto."
+      },
+      "opciones": {
+        "en": ["True", "False"],
+        "ca": ["Cert", "Fals"],
+        "es": ["Verdadero", "Falso"]
+      },
+      "respuesta_correcta": 0,
+      "pista1": {
+        "en": "Think about how the model chooses each word.",
+        "ca": "Pensa en com el model tria cada paraula.",
+        "es": "Piensa en cómo elige el modelo cada palabra."
+      },
+      "pista2": {
+        "en": "Confidence in the wording is not the same as checking a source.",
+        "ca": "La seguretat en la redacció no és el mateix que comprovar una font.",
+        "es": "La seguridad en la redacción no es lo mismo que comprobar una fuente."
+      },
+      "explicacion": {
+        "en": "Models generate plausible text; they do not verify facts by default. Always check important claims against a reliable source.",
+        "ca": "Els models generen text plausible; no verifiquen fets per defecte. Comprova sempre les afirmacions importants amb una font fiable.",
+        "es": "Los modelos generan texto plausible; no verifican hechos por defecto. Comprueba siempre las afirmaciones importantes con una fuente fiable."
+      },
+      "curiosidad": {
+        "en": "This behaviour is often called a “hallucination”.",
+        "ca": "Aquest comportament s'anomena sovint «al·lucinació».",
+        "es": "A este comportamiento se le suele llamar «alucinación»."
+      },
+      "fuente": ""
+    },
+    {
+      "id": "CQ-0002",
+      "fecha_publicacion": "2026-11-01",
+      "estado": "publicado",
+      "categoria": "estudio",
+      "dificultad": 1,
+      "minutos": 2,
+      "tipo": "test",
+      "titulo": {
+        "en": "Study smarter",
+        "ca": "Estudia millor",
+        "es": "Estudia mejor"
+      },
+      "enunciado": {
+        "en": "Which technique has the strongest evidence for long-term retention?",
+        "ca": "Quina tècnica té més evidència per a la retenció a llarg termini?",
+        "es": "¿Qué técnica tiene más evidencia para la retención a largo plazo?"
+      },
+      "opciones": {
+        "en": ["Re-reading the notes", "Highlighting", "Testing yourself (active recall)", "Reading aloud"],
+        "ca": ["Rellegir els apunts", "Subratllar", "Posar-te a prova (recuperació activa)", "Llegir en veu alta"],
+        "es": ["Releer los apuntes", "Subrayar", "Ponerte a prueba (recuperación activa)", "Leer en voz alta"]
+      },
+      "respuesta_correcta": 2,
+      "pista1": {
+        "en": "Passive methods feel productive but fade fast.",
+        "ca": "Els mètodes passius semblen productius però s'obliden ràpid.",
+        "es": "Los métodos pasivos parecen productivos pero se olvidan rápido."
+      },
+      "pista2": {
+        "en": "Retrieving information strengthens memory more than reviewing it.",
+        "ca": "Recuperar la informació reforça la memòria més que repassar-la.",
+        "es": "Recuperar la información refuerza la memoria más que repasarla."
+      },
+      "explicacion": {
+        "en": "Testing yourself forces retrieval, which strengthens memory. Combine it with spaced repetition.",
+        "ca": "Posar-te a prova força la recuperació, que reforça la memòria. Combina-ho amb la repetició espaiada.",
+        "es": "Ponerte a prueba obliga a recuperar la información, lo que refuerza la memoria. Combínalo con la repetición espaciada."
+      },
+      "curiosidad": {
+        "en": "You can ask an AI assistant to quiz you instead of asking it for the answer.",
+        "ca": "Pots demanar a un assistent d'IA que et faci preguntes en lloc de demanar-li la resposta.",
+        "es": "Puedes pedirle a un asistente de IA que te haga preguntas en lugar de pedirle la respuesta."
+      },
+      "fuente": ""
+    },
+    {
+      "id": "CQ-0003",
+      "fecha_publicacion": "2026-11-02",
+      "estado": "publicado",
+      "categoria": "descubre",
+      "dificultad": 2,
+      "minutos": 3,
+      "tipo": "test",
+      "titulo": {
+        "en": "What does “token” mean?",
+        "ca": "Què vol dir «token»?",
+        "es": "¿Qué significa «token»?"
+      },
+      "enunciado": {
+        "en": "In a language model, a token is…",
+        "ca": "En un model de llenguatge, un token és…",
+        "es": "En un modelo de lenguaje, un token es…"
+      },
+      "opciones": {
+        "en": ["A whole sentence", "A piece of text, often a word fragment", "A user account", "An image"],
+        "ca": ["Una frase sencera", "Un fragment de text, sovint part d'una paraula", "Un compte d'usuari", "Una imatge"],
+        "es": ["Una frase entera", "Un fragmento de texto, a menudo parte de una palabra", "Una cuenta de usuario", "Una imagen"]
+      },
+      "respuesta_correcta": 1,
+      "pista1": {
+        "en": "Models read text in small units.",
+        "ca": "Els models llegeixen el text en unitats petites.",
+        "es": "Los modelos leen el texto en unidades pequeñas."
+      },
+      "pista2": {
+        "en": "A long word may be split into several of them.",
+        "ca": "Una paraula llarga es pot dividir en diversos.",
+        "es": "Una palabra larga puede dividirse en varios."
+      },
+      "explicacion": {
+        "en": "Text is split into tokens (words or word pieces) before the model processes it. Limits and prices are often counted in tokens.",
+        "ca": "El text es divideix en tokens (paraules o trossos de paraula) abans que el model el processi. Els límits i preus sovint es compten en tokens.",
+        "es": "El texto se divide en tokens (palabras o trozos de palabra) antes de que el modelo lo procese. Los límites y precios suelen contarse en tokens."
+      },
+      "curiosidad": {
+        "en": "Roughly, 1,000 tokens is about 750 words in English.",
+        "ca": "Aproximadament, 1.000 tokens són unes 750 paraules en anglès.",
+        "es": "Aproximadamente, 1.000 tokens equivalen a unas 750 palabras en inglés."
+      },
+      "fuente": ""
+    }
+  ]
+}

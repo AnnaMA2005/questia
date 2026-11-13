@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>QuestIA</title>
+  <meta name="description" content="QuestIA: un reto diario sobre inteligencia artificial y pensamiento crítico para estudiantes universitarios.">
+  <meta name="theme-color" content="#D9480F">
+  <meta name="color-scheme" content="light">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="QuestIA">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="skipToContent">Saltar al contenido</a>
+
+  <header class="app-header">
+    <div class="brand">
+      <img src="icon.svg" alt="" width="36" height="36">
+      <span class="brand-name">QuestIA</span>
+    </div>
+    <div class="lang-switch" role="group" aria-label="Idioma" data-i18n-aria="language">
+      <button type="button" class="lang-btn" data-lang="en" lang="en" aria-pressed="false">EN</button>
+      <button type="button" class="lang-btn" data-lang="ca" lang="ca" aria-pressed="false">CA</button>
+      <button type="button" class="lang-btn" data-lang="es" lang="es" aria-pressed="false">ES</button>
+    </div>
+  </header>
+
+  <main id="main" class="app-main" tabindex="-1">
+    <section class="card hero">
+      <p class="eyebrow" data-i18n="phaseLabel">Entorno de pruebas · fase 2</p>
+      <h1 data-i18n="heroTitle">QuestIA está en marcha</h1>
+      <p class="lead" data-i18n="heroLead">Un reto diario sobre inteligencia artificial y pensamiento crítico para estudiantes universitarios. El prototipo llegará en la siguiente fase.</p>
+      <p class="muted" data-i18n="heroNote">Esta página sirve para comprobar que la publicación en GitHub Pages, los tres idiomas y la instalación como aplicación funcionan correctamente.</p>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="checksTitle">Comprobaciones del entorno</h2>
+      <ul class="checks" aria-live="polite">
+        <li><span class="check-label" data-i18n="checkLang">Idioma activo</span> <span class="check-value" id="check-lang">–</span></li>
+        <li><span class="check-label" data-i18n="checkMode">Modo de ejecución</span> <span class="check-value" id="check-mode">–</span></li>
+        <li><span class="check-label" data-i18n="checkSw">Service worker</span> <span class="check-value" id="check-sw">–</span></li>
+        <li><span class="check-label" data-i18n="checkData">Catálogo de demostración</span> <span class="check-value" id="check-data">–</span></li>
+        <li><span class="check-label" data-i18n="checkVersion">Versión</span> <span class="check-value" id="check-version">–</span></li>
+      </ul>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Secciones" data-i18n-aria="sections">
+    <a href="#" class="nav-item is-active" aria-current="page"><span class="nav-icon" aria-hidden="true">☀</span><span data-i18n="navHome">Inicio</span></a>
+    <a href="#" class="nav-item" aria-disabled="true"><span class="nav-icon" aria-hidden="true">◎</span><span data-i18n="navMind">Mente</span></a>
+    <a href="#" class="nav-item" aria-disabled="true"><span class="nav-icon" aria-hidden="true">✎</span><span data-i18n="navStudy">Estudio</span></a>
+    <a href="#" class="nav-item" aria-disabled="true"><span class="nav-icon" aria-hidden="true">✦</span><span data-i18n="navDiscover">Descubre</span></a>
+    <a href="#" class="nav-item" aria-disabled="true"><span class="nav-icon" aria-hidden="true">▶</span><span data-i18n="navVideos">Vídeos</span></a>
+  </nav>
+
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
