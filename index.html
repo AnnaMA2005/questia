@@ -21,10 +21,10 @@
   <a class="skip-link" href="#main" data-i18n="skipToContent">Saltar al contenido</a>
 
   <header class="app-header">
-    <div class="brand">
+    <a class="brand" href="#inicio" aria-label="QuestIA">
       <img src="icon.svg" alt="" width="36" height="36">
       <span class="brand-name">QuestIA</span>
-    </div>
+    </a>
     <div class="lang-switch" role="group" aria-label="Idioma" data-i18n-aria="language">
       <button type="button" class="lang-btn" data-lang="en" lang="en" aria-pressed="false">EN</button>
       <button type="button" class="lang-btn" data-lang="ca" lang="ca" aria-pressed="false">CA</button>
@@ -33,31 +33,75 @@
   </header>
 
   <main id="main" class="app-main" tabindex="-1">
-    <section class="card hero">
-      <p class="eyebrow" data-i18n="phaseLabel">Entorno de pruebas · fase 2</p>
-      <h1 data-i18n="heroTitle">QuestIA está en marcha</h1>
-      <p class="lead" data-i18n="heroLead">Un reto diario sobre inteligencia artificial y pensamiento crítico para estudiantes universitarios. El prototipo llegará en la siguiente fase.</p>
-      <p class="muted" data-i18n="heroNote">Esta página sirve para comprobar que la publicación en GitHub Pages, los tres idiomas y la instalación como aplicación funcionan correctamente.</p>
+
+    <!-- ===== Inicio ===== -->
+    <section class="view" data-view="inicio" hidden>
+      <p class="greeting" id="greeting"></p>
+
+      <article class="card card-today" id="today-card" aria-labelledby="today-title">
+        <p class="eyebrow" data-i18n="todayQuest">Reto del día</p>
+        <div id="today-body"></div>
+      </article>
+
+      <article class="card" aria-labelledby="progress-title">
+        <h2 id="progress-title" data-i18n="progressTitle">Tu progreso</h2>
+        <p class="progress-count" id="progress-count"></p>
+        <div class="calendar" id="calendar" role="img"></div>
+      </article>
+
+      <article class="card" aria-labelledby="previous-title">
+        <h2 id="previous-title" data-i18n="previousQuests">Retos anteriores</h2>
+        <ul class="quest-list" id="previous-list"></ul>
+      </article>
+
+      <article class="card card-survey">
+        <h2 data-i18n="surveyCardTitle">¿Me ayudas con mi TFG?</h2>
+        <p data-i18n="surveyCardBody">Estoy investigando cómo usamos la inteligencia artificial en la universidad. Tu experiencia me ayudaría mucho.</p>
+        <a class="btn btn-secondary" href="#encuesta" data-i18n="surveyCardCta">Ver la encuesta</a>
+      </article>
     </section>
 
-    <section class="card">
-      <h2 data-i18n="checksTitle">Comprobaciones del entorno</h2>
-      <ul class="checks" aria-live="polite">
-        <li><span class="check-label" data-i18n="checkLang">Idioma activo</span> <span class="check-value" id="check-lang">–</span></li>
-        <li><span class="check-label" data-i18n="checkMode">Modo de ejecución</span> <span class="check-value" id="check-mode">–</span></li>
-        <li><span class="check-label" data-i18n="checkSw">Service worker</span> <span class="check-value" id="check-sw">–</span></li>
-        <li><span class="check-label" data-i18n="checkData">Catálogo de demostración</span> <span class="check-value" id="check-data">–</span></li>
-        <li><span class="check-label" data-i18n="checkVersion">Versión</span> <span class="check-value" id="check-version">–</span></li>
-      </ul>
+    <!-- ===== Reto (recorrido) ===== -->
+    <section class="view" data-view="reto" hidden>
+      <a class="back-link" href="#inicio" data-i18n="back">Volver</a>
+      <article class="card card-quest" id="quest-card" aria-live="polite"></article>
     </section>
+
+    <!-- ===== Retos (próximamente) ===== -->
+    <section class="view" data-view="retos" hidden>
+      <article class="card card-soon">
+        <p class="eyebrow" data-i18n="comingSoon">Próximamente</p>
+        <h1 data-i18n="navQuests">Retos</h1>
+        <p data-i18n="soonQuests">Aquí encontrarás todos los retos por categoría: Mente, Estudio y Descubre. Llegará en la siguiente entrega.</p>
+      </article>
+    </section>
+
+    <!-- ===== Vídeos (próximamente) ===== -->
+    <section class="view" data-view="videos" hidden>
+      <article class="card card-soon">
+        <p class="eyebrow" data-i18n="comingSoon">Próximamente</p>
+        <h1 data-i18n="navVideos">Vídeos</h1>
+        <p data-i18n="soonVideos">Una selección de vídeos de interés académico sobre IA, ciencia y método de estudio. Llegará en la siguiente entrega.</p>
+      </article>
+    </section>
+
+    <!-- ===== Encuesta (marcador de posición) ===== -->
+    <section class="view" data-view="encuesta" hidden>
+      <article class="card card-soon">
+        <p class="eyebrow" data-i18n="comingSoon">Próximamente</p>
+        <h1 data-i18n="navSurvey">Encuesta</h1>
+        <p data-i18n="soonSurvey">La encuesta del TFG sobre IA generativa en la universidad se abrirá aquí cuando esté lista. Es anónima y se podrá responder desde el navegador, sin instalar nada.</p>
+      </article>
+    </section>
+
+    <p class="version" id="app-version"></p>
   </main>
 
   <nav class="bottom-nav" aria-label="Secciones" data-i18n-aria="sections">
-    <a href="#" class="nav-item is-active" aria-current="page"><span class="nav-icon" aria-hidden="true">☀</span><span data-i18n="navHome">Inicio</span></a>
-    <a href="#" class="nav-item" aria-disabled="true"><span class="nav-icon" aria-hidden="true">◎</span><span data-i18n="navMind">Mente</span></a>
-    <a href="#" class="nav-item" aria-disabled="true"><span class="nav-icon" aria-hidden="true">✎</span><span data-i18n="navStudy">Estudio</span></a>
-    <a href="#" class="nav-item" aria-disabled="true"><span class="nav-icon" aria-hidden="true">✦</span><span data-i18n="navDiscover">Descubre</span></a>
-    <a href="#" class="nav-item" aria-disabled="true"><span class="nav-icon" aria-hidden="true">▶</span><span data-i18n="navVideos">Vídeos</span></a>
+    <a href="#inicio" class="nav-item" data-nav="inicio"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="currentColor"/></svg></span><span data-i18n="navHome">Inicio</span></a>
+    <a href="#retos" class="nav-item" data-nav="retos"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2l2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6z" fill="currentColor"/></svg></span><span data-i18n="navQuests">Retos</span></a>
+    <a href="#videos" class="nav-item" data-nav="videos"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm6 3.5v7l6-3.5z" fill="currentColor"/></svg></span><span data-i18n="navVideos">Vídeos</span></a>
+    <a href="#encuesta" class="nav-item" data-nav="encuesta"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm2 5v2h8V8zm0 4v2h8v-2zm0 4v2h5v-2z" fill="currentColor"/></svg></span><span data-i18n="navSurvey">Encuesta</span></a>
   </nav>
 
   <script src="i18n.js"></script>

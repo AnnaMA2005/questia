@@ -34,4 +34,4 @@ y abrir http://localhost:8080/ en el navegador. El service worker solo se regist
 
 ## Estado
 
-Fase 2 (entorno): archivos base publicados. Siguiente: fase 3, prototipo de frontend con las cinco pantallas.
+Fase 3, entrega 1 (v0.3.0): Inicio con reto del día, recorrido completo del reto, progreso con calendario y navegación definitiva de cuatro pestañas (Inicio, Retos, Vídeos, Encuesta). Pendiente la entrega 2: Retos con filtros, Vídeos y Encuesta.

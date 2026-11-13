@@ -1,5 +1,6 @@
 {
-  "_comment": "Catálogo de DEMOSTRACIÓN para el prototipo y respaldo si el servidor falla. La fuente editorial real es la hoja «quests» en Google Sheets (fase 4). Campos según la sección 5 del documento maestro.",
+  "_comment": "Catálogo de DEMOSTRACIÓN para el prototipo y respaldo si el servidor falla. La fuente editorial real es la hoja «quests» en Google Sheets (fase 4). Campos según la sección 5 del documento maestro. demo_relative_dates: la app reparte las fechas (hoy, ayer, anteayer…) por orden de la lista para que el prototipo siempre tenga reto del día; se retira cuando exista el servidor.",
+  "demo_relative_dates": true,
   "generated": "2026-10-31",
   "quests": [
     {

@@ -1,7 +1,7 @@
 /* QuestIA — service worker (fase 2: caché mínima de la interfaz).
    Cada publicación nueva debe cambiar CACHE_VERSION para que los dispositivos reciban la actualización. */
 
-var CACHE_VERSION = "questia-v0.2.0";
+var CACHE_VERSION = "questia-v0.3.0";
 var APP_SHELL = [
   "./",
   "./index.html",
