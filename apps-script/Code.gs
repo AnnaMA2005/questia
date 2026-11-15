@@ -142,7 +142,7 @@ function publishedChannels_() {
       url: String(r.url).trim(),
       plataforma: norm_(r.plataforma) || "youtube",
       idioma: norm_(r.idioma),
-      tema: String(r.tema || "").trim(),
+      tema: multi_(r, "tema"),
       por_que: multi_(r, "por_que")
     };
   });

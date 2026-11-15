@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  var APP_VERSION = "0.4.0";
+  var APP_VERSION = "0.4.1";
   var STORAGE_LANG = "questia.lang";
   var STORAGE_PROGRESS = "questia.progress";
   var STORAGE_INSTALL_DISMISSED = "questia.installDismissed";
@@ -20,6 +20,7 @@
 
   var catalog = { quests: [], todayId: null, loaded: false, error: false };
   var videos = { items: [], loaded: false, error: false };
+  var channels = { items: [] };
   var filters = { questCat: "all", videoCat: "all", videoLang: "all" };
   var progress = loadProgress();
 
@@ -189,6 +190,7 @@
     videos.items = (Array.isArray(json.videos) ? json.videos : []).filter(function (v) { return v.youtube_id; });
     videos.loaded = true;
     videos.error = false;
+    channels.items = Array.isArray(json.canales) ? json.canales.filter(function (c) { return c.url; }) : [];
     source.kind = kind;
     source.stale = false;
     render();
@@ -271,6 +273,20 @@
     document.getElementById("greeting").textContent = t(key);
   }
 
+  /* Imagen del reto: la propia (columna «imagen» de la hoja) o la ilustración de su categoría. */
+  function questImageSrc(q) {
+    var own = String(q.imagen || "").trim();
+    if (own) return own;
+    var cat = ["mente", "estudio", "descubre"].indexOf(q.categoria) !== -1 ? q.categoria : "descubre";
+    return "img/cat-" + cat + ".svg?v=1";
+  }
+  function questIllustration(q) {
+    return el("img", { class: "quest-illustration", src: questImageSrc(q), alt: "", width: "160", height: "120", loading: "lazy" });
+  }
+  function questThumb(q) {
+    return el("img", { class: "quest-thumb", src: questImageSrc(q), alt: "", width: "56", height: "42", loading: "lazy" });
+  }
+
   function questMeta(q) {
     var catKey = { mente: "catMente", estudio: "catEstudio", descubre: "catDescubre" }[q.categoria] || "catMente";
     return el("ul", { class: "meta" }, [
@@ -294,6 +310,7 @@
       body.appendChild(el("p", { class: "muted", text: t("noQuestBody") }));
       return;
     }
+    body.appendChild(questIllustration(q));
     body.appendChild(el("h1", { text: tc(q.titulo) }));
     body.appendChild(questMeta(q));
     body.appendChild(el("p", { class: "muted", text: tc(q.enunciado) }));
@@ -354,6 +371,7 @@
     items.forEach(function (q) {
       list.appendChild(el("li", null, [
         el("a", { class: "quest-item", href: "#reto/" + q.id }, [
+          questThumb(q),
           el("span", { class: "quest-title", text: tc(q.titulo) }),
           el("span", { class: "quest-date", text: formatDate(q.fecha_publicacion) }),
           progress.solved[q.id] ? el("span", { class: "quest-check", "aria-label": t("solvedBadge"), text: "✓" }) : null
@@ -377,6 +395,7 @@
 
     if (questState.id !== id) questState = { id: id, hints: 0, selected: null, answered: false };
 
+    card.appendChild(questIllustration(q));
     card.appendChild(el("p", { class: "eyebrow", text: formatDate(q.fecha_publicacion) }));
     card.appendChild(el("h1", { text: tc(q.titulo) }));
     card.appendChild(questMeta(q));
@@ -527,6 +546,7 @@
       var catKey = { mente: "catMente", estudio: "catEstudio", descubre: "catDescubre" }[q.categoria] || "catMente";
       list.appendChild(el("li", null, [
         el("a", { class: "quest-item", href: "#reto/" + q.id }, [
+          questThumb(q),
           el("span", { class: "quest-title" }, [
             tc(q.titulo),
             el("span", { class: "chip chip-cat", style: "margin-left:8px", text: t(catKey) })
@@ -559,8 +579,31 @@
       return (filters.videoCat === "all" || v.categoria === filters.videoCat) &&
              (filters.videoLang === "all" || v.idioma_video === filters.videoLang);
     });
-    if (!items.length) { list.appendChild(el("p", { class: "muted", text: t("noVideosFilter") })); return; }
-    items.forEach(function (v) { list.appendChild(videoCard(v)); });
+    if (!items.length) { list.appendChild(el("p", { class: "muted", text: t("noVideosFilter") })); }
+    else { items.forEach(function (v) { list.appendChild(videoCard(v)); }); }
+    renderChannels();
+  }
+
+  /* Canales recomendados (hoja «canales», solo publicados). Se filtran con el mismo idioma que los vídeos. */
+  function renderChannels() {
+    var card = document.getElementById("channels-card");
+    var list = document.getElementById("channels-list");
+    if (!card || !list) return;
+    var items = channels.items.filter(function (c) { return filters.videoLang === "all" || c.idioma === filters.videoLang; });
+    card.hidden = !items.length;
+    clear(list);
+    items.forEach(function (c) {
+      var langKey = "videoLang_" + c.idioma;
+      list.appendChild(el("li", { class: "channel-item" }, [
+        el("div", { class: "channel-head" }, [
+          el("h3", { text: c.nombre }),
+          el("span", { class: "chip", text: t(langKey) })
+        ]),
+        tc(c.tema) ? el("p", { class: "channel-topic", text: tc(c.tema) }) : null,
+        el("p", { class: "muted", text: tc(c.por_que) }),
+        el("a", { class: "btn btn-secondary", href: c.url, target: "_blank", rel: "noopener noreferrer", text: t("openChannel") })
+      ]));
+    });
   }
 
   function videoCard(v) {

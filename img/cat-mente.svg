@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" width="160" height="120" role="img" aria-label="">
+  <rect width="160" height="120" rx="16" fill="#FFE8D1"/>
+  <!-- cabeza de perfil: cráneo redondo, nariz y cuello -->
+  <path d="M58 100 V86 C40 80 30 66 30 50 30 29 47 14 70 14 c20 0 36 14 38 32 l9 14 c1 2 0 4 -2 4 h-7 v10 c0 6 -5 10 -11 10 h-9 v16" fill="#FFFFFF" stroke="#D9480F" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- engranaje de pensamiento -->
+  <circle cx="68" cy="50" r="11" fill="none" stroke="#FF922B" stroke-width="5"/>
+  <g stroke="#FF922B" stroke-width="5" stroke-linecap="round">
+    <path d="M68 31 v6 M68 63 v6 M49 50 h6 M81 50 h6 M54.6 36.6 l4.2 4.2 M77.2 59.2 l4.2 4.2 M54.6 63.4 l4.2 -4.2 M77.2 40.8 l4.2 -4.2"/>
+  </g>
+  <!-- signo de interrogación -->
+  <path d="M120 28 a9 9 0 1 1 14 7 c-3 2 -5 5 -5 9" fill="none" stroke="#D9480F" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="129" cy="54" r="3.5" fill="#D9480F"/>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" width="160" height="120" role="img" aria-label="">
+  <rect width="160" height="120" rx="16" fill="#FFE8D1"/>
+  <!-- libro abierto -->
+  <path d="M28 40 c16 -8 32 -8 48 0 v50 c-16 -8 -32 -8 -48 0z" fill="#FFFFFF" stroke="#D9480F" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M124 40 c-16 -8 -32 -8 -48 0 v50 c16 -8 32 -8 48 0z" fill="#FFFFFF" stroke="#D9480F" stroke-width="5" stroke-linejoin="round"/>
+  <g stroke="#FF922B" stroke-width="4" stroke-linecap="round">
+    <path d="M40 54 h24 M40 64 h24 M40 74 h16 M88 54 h24 M88 64 h24"/>
+  </g>
+  <!-- marca de verificación -->
+  <path d="M94 78 l7 7 14 -16" fill="none" stroke="#2F9E44" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- lápiz -->
+  <path d="M118 22 l16 16 -34 34 -20 4 4 -20z" fill="#FFFFFF" stroke="#D9480F" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M84 56 l16 16" stroke="#FF922B" stroke-width="5" stroke-linecap="round"/>
+</svg>

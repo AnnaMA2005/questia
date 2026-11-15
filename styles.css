@@ -283,3 +283,19 @@ p:last-child { margin-bottom: 0; }
 .install-steps { margin: 0; padding-left: 22px; display: grid; gap: 4px; }
 .install-steps li { padding-left: 4px; }
 .ios-share { vertical-align: -4px; color: var(--color-primary); }
+
+/* ---------- Ilustraciones de categoría ---------- */
+.quest-illustration {
+  display: block; width: 100%; max-width: 240px; height: auto;
+  border-radius: var(--radius-sm); margin: 0 0 12px;
+}
+.card-quest .quest-illustration { margin-bottom: 4px; }
+.quest-thumb { width: 56px; height: 42px; border-radius: 8px; flex: none; }
+
+/* ---------- Canales recomendados ---------- */
+.channel-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.channel-item { padding: 14px; border-radius: var(--radius-sm); background: var(--color-bg); display: grid; gap: 6px; }
+.channel-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.channel-head h3 { margin: 0; }
+.channel-topic { margin: 0; font-weight: 600; color: var(--color-primary-dark); font-size: 0.9rem; }
+.channel-item .btn { justify-self: start; min-height: 40px; padding: 6px 16px; font-size: 0.9rem; }

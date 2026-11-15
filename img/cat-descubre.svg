@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" width="160" height="120" role="img" aria-label="">
+  <rect width="160" height="120" rx="16" fill="#FFE8D1"/>
+  <!-- brújula -->
+  <circle cx="68" cy="62" r="34" fill="#FFFFFF" stroke="#D9480F" stroke-width="5"/>
+  <circle cx="68" cy="62" r="24" fill="none" stroke="#FFE8D1" stroke-width="3"/>
+  <path d="M68 36 l9 20 -9 32 -9 -32z" fill="#FF922B"/>
+  <path d="M68 36 l9 20 -9 6 -9 -6z" fill="#D9480F"/>
+  <circle cx="68" cy="62" r="4" fill="#FFFFFF"/>
+  <!-- chispa / estrella de descubrimiento -->
+  <path d="M124 26 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6z" fill="#FF922B"/>
+  <path d="M136 72 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z" fill="#D9480F"/>
+</svg>

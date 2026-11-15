@@ -8,18 +8,21 @@
    - Resto de recursos propios (css, js, iconos, versionados con ?v=): caché primero; si no están, red.
    Cuando se instala una versión nueva, toma el control enseguida y la app se recarga una vez. */
 
-var CACHE_VERSION = "questia-v0.4.0";
+var CACHE_VERSION = "questia-v0.4.1";
 var APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=0.4.0",
-  "./app.js?v=0.4.0",
-  "./i18n.js?v=0.4.0",
-  "./config.js?v=0.4.0",
+  "./styles.css?v=0.4.1",
+  "./app.js?v=0.4.1",
+  "./i18n.js?v=0.4.1",
+  "./config.js?v=0.4.1",
   "./manifest.json",
   "./icon.svg?v=2",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
+  "./img/cat-mente.svg?v=1",
+  "./img/cat-estudio.svg?v=1",
+  "./img/cat-descubre.svg?v=1",
   "./data/quests.json",
   "./data/videos.json"
 ];

@@ -20,6 +20,7 @@ manifest.json         Manifiesto PWA
 service-worker.js     Caché de la interfaz (cambiar CACHE_VERSION en cada publicación)
 icon.svg              Icono vectorial
 icons/                Iconos PNG 192 y 512 px
+img/                  Ilustraciones por categoría (SVG)
 data/quests.json      Retos de respaldo (solo si nunca se pudo hablar con el servidor)
 data/videos.json      Vídeos de respaldo
 docs/                 Documentación técnica y editorial
@@ -37,4 +38,4 @@ y abrir http://localhost:8080/ en el navegador. El service worker solo se regist
 
 ## Estado
 
-Fase 4, entrega 1 (v0.4.0): la app lee retos y vídeos de la hoja de Google a través de Apps Script, con caché en el dispositivo y respaldo local. Siguiente: 30 retos revisados, canales, ilustraciones por categoría.
+Fase 4, entrega 2 (v0.4.1): catálogo desde la hoja de Google vía Apps Script, ilustraciones por categoría y sección de canales recomendados. Siguiente: 30 retos revisados.

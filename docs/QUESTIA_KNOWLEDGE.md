@@ -19,6 +19,8 @@ Este documento recoge lo que cualquier persona (o asistente) necesita para traba
 | Vídeos | `data/videos.json` (simula la hoja «videos»): tarjetas con miniatura de `i.ytimg.com`, filtros por categoría e idioma del vídeo, orden por `fecha_alta`. El reproductor (`youtube-nocookie.com/embed`) solo se inserta al pulsar. IDs verificados contra el canal original antes de publicar. | `data/videos.json`, `app.js` (`renderVideos`, `playVideo`) |
 | Encuesta | Marcador de posición con texto informativo y botón desactivado hasta la fase 5. | `index.html` |
 | Instalación | Tarjeta en Inicio: con `beforeinstallprompt` (Android, Chrome/Edge) muestra botón «Instalar»; en iOS/iPadOS (sin API) muestra guía de dos pasos; oculta si ya está en modo instalado; «Ahora no» la silencia 7 días (`questia.installDismissed`). | `app.js` (`setupInstall`, `renderInstallCard`) |
+| Ilustraciones | Tres SVG por categoría en `img/cat-{mente,estudio,descubre}.svg` (cabecera del reto y miniatura en listas). Si la fila del reto tiene `imagen` (ruta o URL), esa imagen sustituye a la de la categoría. | `img/`, `app.js` (`questImageSrc`) |
+| Canales | Sección «Canales recomendados» al final de Vídeos, desde la pestaña `canales` (solo `publicado`); columnas `tema_en/ca/es` y `por_que_en/ca/es`; se filtra con el selector de idioma de Vídeos. Criterios de inclusión en la pestaña `leeme`. | `app.js` (`renderChannels`), hoja `canales` |
 | Icono | Chispa blanca de cuatro puntas con chispa menor sobre degradado naranja (aprobado 13/11/2026). | `icon.svg`, `icons/` |
 | PWA y caché | `manifest.json` con `start_url` y `scope` relativos. Service worker: página y `data/*.json` por red saltando la caché HTTP (caché propia si falla); css/js/iconos versionados con `?v=` y servidos desde caché. Al activarse una versión nueva, la página se recarga una vez (`controllerchange`). Motivo: GitHub Pages cachea 10 min por archivo y sin esto se mezclaban versiones (visto el 13/11/2026). | `manifest.json`, `service-worker.js`, `app.js` |
 | Versionado | **En cada publicación cambiar tres cosas:** `APP_VERSION` en `app.js`, `CACHE_VERSION` y la lista `APP_SHELL` en `service-worker.js`, y el sufijo `?v=` de css/js/config (e icono si cambia) en `index.html`. | `app.js`, `service-worker.js`, `index.html` |
@@ -44,7 +46,8 @@ Este documento recoge lo que cualquier persona (o asistente) necesita para traba
 
 ## Historial de fases
 
-- **Fase 4 — Catálogo de contenidos, entrega 1 (v0.4.0, 15/11/2026):** hoja de Google creada, Apps Script desplegado, app conectada con caché en dispositivo y respaldo local. Pendiente: 30 retos revisados, lista de canales, ilustraciones por categoría.
+- **Fase 4 — Catálogo de contenidos, entrega 1 (v0.4.0, 15/11/2026):** hoja de Google creada, Apps Script desplegado, app conectada con caché en dispositivo y respaldo local.
+- **Fase 4 — Entrega 2 (v0.4.1, 15/11/2026):** ilustraciones por categoría; sección Canales (10 canales propuestos en la hoja, estado revisado hasta aprobación de la autora). Pendiente: 30 retos revisados.
 
 - **Fase 2 — Entorno (cerrada el 13/11/2026):** archivos base publicados en GitHub Pages y verificados (v0.2.0).
 - **Fase 3 — Prototipo de frontend, entrega 1 (v0.3.0, parche v0.3.1):** Inicio con reto del día, recorrido completo del reto, progreso con calendario, navegación definitiva de cuatro pestañas (Retos, Vídeos y Encuesta como «próximamente»), icono definitivo.
