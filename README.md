@@ -4,7 +4,7 @@ Webapp educativa instalable (PWA) en inglés, catalán y castellano para estudia
 
 - **Publicación:** GitHub Pages desde la rama `main` → https://annama2005.github.io/questia/
 - **Frontend:** HTML, CSS y JavaScript sin frameworks.
-- **Backend (fases posteriores):** Google Sheets + Apps Script.
+- **Backend:** Google Sheets («QuestIA · contenidos») + Apps Script (`apps-script/Code.gs`). URL del endpoint en `config.js`.
 - **Documentación del proyecto:** `docs/QUESTIA_KNOWLEDGE.md`.
 
 ## Estructura
@@ -14,12 +14,14 @@ index.html            Página principal (shell de la app)
 styles.css            Estilos base y paleta
 app.js                Idioma, service worker y comprobaciones de entorno
 i18n.js               Textos de interfaz en en / ca / es
+config.js             URL del backend y tiempos de caché (sin secretos)
+apps-script/Code.gs   Código del backend (se pega en el editor de Apps Script de la hoja)
 manifest.json         Manifiesto PWA
 service-worker.js     Caché de la interfaz (cambiar CACHE_VERSION en cada publicación)
 icon.svg              Icono vectorial
 icons/                Iconos PNG 192 y 512 px
-data/quests.json      Catálogo de retos de demostración (solo prototipo y respaldo)
-data/videos.json      Lista de vídeos de demostración (simula la hoja «videos»)
+data/quests.json      Retos de respaldo (solo si nunca se pudo hablar con el servidor)
+data/videos.json      Vídeos de respaldo
 docs/                 Documentación técnica y editorial
 ```
 
@@ -35,4 +37,4 @@ y abrir http://localhost:8080/ en el navegador. El service worker solo se regist
 
 ## Estado
 
-Fase 3 completa (v0.3.2): Inicio con reto del día, recorrido del reto, progreso con calendario, pestaña Retos con filtros, pestaña Vídeos (lista demo), Encuesta como marcador de posición, tarjeta de instalación. Siguiente: fase 4 (Google Sheets + Apps Script).
+Fase 4, entrega 1 (v0.4.0): la app lee retos y vídeos de la hoja de Google a través de Apps Script, con caché en el dispositivo y respaldo local. Siguiente: 30 retos revisados, canales, ilustraciones por categoría.

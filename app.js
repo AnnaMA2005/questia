@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  var APP_VERSION = "0.3.2";
+  var APP_VERSION = "0.4.0";
   var STORAGE_LANG = "questia.lang";
   var STORAGE_PROGRESS = "questia.progress";
   var STORAGE_INSTALL_DISMISSED = "questia.installDismissed";
@@ -18,7 +18,7 @@
   var LANGS = window.QUESTIA_LANGS;
   var currentLang = null;
 
-  var catalog = { quests: [], loaded: false, error: false };
+  var catalog = { quests: [], todayId: null, loaded: false, error: false };
   var videos = { items: [], loaded: false, error: false };
   var filters = { questCat: "all", videoCat: "all", videoLang: "all" };
   var progress = loadProgress();
@@ -131,54 +131,105 @@
      Catálogo y reto del día
      ========================================================= */
 
+  var CONFIG = window.QUESTIA_CONFIG || {};
+  var STORAGE_CATALOG = "questia.catalog";
+  var source = { kind: null, stale: false };   // kind: "server" | "cache" | "local"
+
+  /* Orden de carga:
+     1. Catálogo guardado en el dispositivo (si es de hoy): se pinta al instante.
+     2. Servidor (Apps Script): si responde, sustituye y se guarda.
+     3. Si el servidor falla y no hay nada guardado: JSON locales de respaldo (data/). */
   function loadCatalog() {
-    fetch("data/quests.json", { cache: "no-cache" })
+    var cached = readCachedCatalog();
+    if (cached) {
+      applyCatalog(cached.data, "cache");
+      if (cached.fresh) return;              // fresco y de hoy: no molestamos al servidor
+    }
+    if (!CONFIG.API_URL) {
+      if (!cached) loadLocalFallback();
+      return;
+    }
+    fetchWithTimeout(CONFIG.API_URL + "?action=all", (CONFIG.API_TIMEOUT_SECONDS || 8) * 1000)
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function (json) {
-        var quests = Array.isArray(json.quests) ? json.quests : [];
-        /* MODO DEMO: el catálogo de demostración no tiene fechas reales; se reparten
-           hoy, ayer, anteayer… para que el prototipo siempre tenga reto del día.
-           Con el servidor (fase 4) las fechas vienen de la hoja y esto desaparece. */
-        if (json.demo_relative_dates) {
-          var today = todayISO();
-          quests.forEach(function (q, i) { q.fecha_publicacion = addDaysISO(today, -i); });
-        }
-        catalog.quests = quests;
-        catalog.loaded = true;
-        render();
+        if (!json || json.ok !== true) throw new Error(json && json.error || "respuesta no válida");
+        storageSet(STORAGE_CATALOG, JSON.stringify({ fetchedAt: Date.now(), today: json.today, data: json }));
+        applyCatalog(json, "server");
       })
       .catch(function () {
-        catalog.error = true;
-        render();
+        if (cached) { source.stale = true; render(); return; }
+        loadLocalFallback();
       });
   }
 
-  function loadVideos() {
-    fetch("data/videos.json", { cache: "no-cache" })
-      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .then(function (json) {
-        videos.items = (Array.isArray(json.videos) ? json.videos : []).filter(function (v) { return v.estado === "publicado" && v.youtube_id; })
-          .sort(function (a, b) { return a.fecha_alta < b.fecha_alta ? 1 : -1; });
-        videos.loaded = true;
-        render();
-      })
-      .catch(function () { videos.error = true; render(); });
+  function fetchWithTimeout(url, ms) {
+    if (typeof AbortController === "undefined") return fetch(url, { cache: "no-store" });
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, ms);
+    return fetch(url, { cache: "no-store", signal: ctrl.signal }).then(function (r) { clearTimeout(timer); return r; }, function (e) { clearTimeout(timer); throw e; });
+  }
+
+  function readCachedCatalog() {
+    try {
+      var raw = storageGet(STORAGE_CATALOG);
+      if (!raw) return null;
+      var obj = JSON.parse(raw);
+      if (!obj || !obj.data || obj.data.ok !== true) return null;
+      var sameDay = obj.today === todayISO();
+      var ageMin = (Date.now() - (obj.fetchedAt || 0)) / 60000;
+      return { data: obj.data, fresh: sameDay && ageMin < (CONFIG.CATALOG_FRESH_MINUTES || 60) };
+    } catch (e) { return null; }
+  }
+
+  function applyCatalog(json, kind) {
+    catalog.quests = Array.isArray(json.quests) ? json.quests : [];
+    catalog.todayId = json.todayId || null;
+    catalog.loaded = true;
+    catalog.error = false;
+    videos.items = (Array.isArray(json.videos) ? json.videos : []).filter(function (v) { return v.youtube_id; });
+    videos.loaded = true;
+    videos.error = false;
+    source.kind = kind;
+    source.stale = false;
+    render();
+  }
+
+  /* Respaldo local: solo si nunca se ha podido hablar con el servidor. */
+  function loadLocalFallback() {
+    Promise.all([
+      fetch("data/quests.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : { quests: [] }; }),
+      fetch("data/videos.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : { videos: [] }; })
+    ]).then(function (res) {
+      var today = todayISO();
+      var quests = (res[0].quests || []).filter(function (q) { return q.estado === "publicado" && q.fecha_publicacion <= today; });
+      var vids = (res[1].videos || []).filter(function (v) { return v.estado === "publicado"; });
+      applyCatalog({ ok: true, quests: quests, videos: vids, todayId: null }, "local");
+      source.stale = true;
+      render();
+    }).catch(function () {
+      catalog.error = true; videos.error = true; render();
+    });
   }
 
   /* Simulación local de la selección en servidor: solo publicados con fecha ≤ hoy. */
   function availableQuests() {
     var today = todayISO();
     return catalog.quests.filter(function (q) {
-      return q.estado === "publicado" && q.fecha_publicacion && q.fecha_publicacion <= today;
+      return (!q.estado || q.estado === "publicado") && q.fecha_publicacion && q.fecha_publicacion <= today;
     }).sort(function (a, b) { return a.fecha_publicacion < b.fecha_publicacion ? 1 : -1; });
   }
   function todaysQuest() {
+    var list = availableQuests();
+    if (catalog.todayId) {
+      var byId = list.filter(function (q) { return q.id === catalog.todayId; })[0];
+      if (byId) return byId;
+    }
     var today = todayISO();
-    return availableQuests().filter(function (q) { return q.fecha_publicacion === today; })[0] || null;
+    return list.filter(function (q) { return q.fecha_publicacion === today; })[0] || null;
   }
   function previousQuests() {
-    var today = todayISO();
-    return availableQuests().filter(function (q) { return q.fecha_publicacion !== today; });
+    var t = todaysQuest();
+    return availableQuests().filter(function (q) { return !t || q.id !== t.id; });
   }
   function findQuest(id) {
     return availableQuests().filter(function (q) { return q.id === id; })[0] || null;
@@ -235,6 +286,7 @@
     clear(body);
     if (catalog.error) { body.appendChild(el("p", { class: "notice", text: t("loadError") })); return; }
     if (!catalog.loaded) return;
+    if (source.stale) body.appendChild(el("p", { class: "notice", text: t("offlineNotice") }));
 
     var q = todaysQuest();
     if (!q) {
@@ -681,7 +733,6 @@
     setupInstall();
     applyLang(detectLang());
     loadCatalog();
-    loadVideos();
     registerServiceWorker();
   }
 

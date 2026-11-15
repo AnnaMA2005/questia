@@ -88,7 +88,8 @@ window.QUESTIA_I18N = {
     finishBtn: "Done",
     alreadySolved: "You solved this challenge on {d}. You can go through it again; it counts once.",
     questNotFound: "This challenge is not available.",
-    loadError: "The challenges could not be loaded. Check your connection and try again."
+    loadError: "The challenges could not be loaded. Check your connection and try again.",
+    offlineNotice: "No connection to the server right now: showing the last content received."
   },
 
   ca: {
@@ -175,7 +176,8 @@ window.QUESTIA_I18N = {
     finishBtn: "Fet",
     alreadySolved: "Vas resoldre aquest repte el {d}. Pots tornar-lo a fer; compta una sola vegada.",
     questNotFound: "Aquest repte no està disponible.",
-    loadError: "No s'han pogut carregar els reptes. Comprova la connexió i torna-ho a provar."
+    loadError: "No s'han pogut carregar els reptes. Comprova la connexió i torna-ho a provar.",
+    offlineNotice: "Ara mateix no hi ha connexió amb el servidor: es mostra l'últim contingut rebut."
   },
 
   es: {
@@ -262,7 +264,8 @@ window.QUESTIA_I18N = {
     finishBtn: "Terminar",
     alreadySolved: "Resolviste este reto el {d}. Puedes repetirlo; cuenta una sola vez.",
     questNotFound: "Este reto no está disponible.",
-    loadError: "No se pudieron cargar los retos. Comprueba la conexión y vuelve a intentarlo."
+    loadError: "No se pudieron cargar los retos. Comprueba la conexión y vuelve a intentarlo.",
+    offlineNotice: "Ahora mismo no hay conexión con el servidor: se muestra el último contenido recibido."
   }
 };
 

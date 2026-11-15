@@ -1,11 +1,10 @@
 {
-  "_comment": "Catálogo de DEMOSTRACIÓN para el prototipo y respaldo si el servidor falla. La fuente editorial real es la hoja «quests» en Google Sheets (fase 4). Campos según la sección 5 del documento maestro. demo_relative_dates: la app reparte las fechas (hoy, ayer, anteayer…) por orden de la lista para que el prototipo siempre tenga reto del día; se retira cuando exista el servidor.",
-  "demo_relative_dates": true,
-  "generated": "2026-10-31",
+  "_comment": "Catálogo de RESPALDO: solo se usa si la app nunca ha podido hablar con el servidor (Apps Script). La fuente editorial real es la hoja «QuestIA · contenidos». Mantener sincronizado con los primeros retos de la hoja. Campos según la sección 5 del documento maestro.",
+  "generated": "2026-11-15",
   "quests": [
     {
       "id": "CQ-0001",
-      "fecha_publicacion": "2026-10-31",
+      "fecha_publicacion": "2026-11-13",
       "estado": "publicado",
       "categoria": "mente",
       "dificultad": 1,
@@ -22,9 +21,18 @@
         "es": "Un modelo de lenguaje puede afirmar un dato falso con la misma seguridad que uno cierto."
       },
       "opciones": {
-        "en": ["True", "False"],
-        "ca": ["Cert", "Fals"],
-        "es": ["Verdadero", "Falso"]
+        "en": [
+          "True",
+          "False"
+        ],
+        "ca": [
+          "Cert",
+          "Fals"
+        ],
+        "es": [
+          "Verdadero",
+          "Falso"
+        ]
       },
       "respuesta_correcta": 0,
       "pista1": {
@@ -51,7 +59,7 @@
     },
     {
       "id": "CQ-0002",
-      "fecha_publicacion": "2026-11-01",
+      "fecha_publicacion": "2026-11-14",
       "estado": "publicado",
       "categoria": "estudio",
       "dificultad": 1,
@@ -68,9 +76,24 @@
         "es": "¿Qué técnica tiene más evidencia para la retención a largo plazo?"
       },
       "opciones": {
-        "en": ["Re-reading the notes", "Highlighting", "Testing yourself (active recall)", "Reading aloud"],
-        "ca": ["Rellegir els apunts", "Subratllar", "Posar-te a prova (recuperació activa)", "Llegir en veu alta"],
-        "es": ["Releer los apuntes", "Subrayar", "Ponerte a prueba (recuperación activa)", "Leer en voz alta"]
+        "en": [
+          "Re-reading the notes",
+          "Highlighting",
+          "Testing yourself (active recall)",
+          "Reading aloud"
+        ],
+        "ca": [
+          "Rellegir els apunts",
+          "Subratllar",
+          "Posar-te a prova (recuperació activa)",
+          "Llegir en veu alta"
+        ],
+        "es": [
+          "Releer los apuntes",
+          "Subrayar",
+          "Ponerte a prueba (recuperación activa)",
+          "Leer en voz alta"
+        ]
       },
       "respuesta_correcta": 2,
       "pista1": {
@@ -97,7 +120,7 @@
     },
     {
       "id": "CQ-0003",
-      "fecha_publicacion": "2026-11-02",
+      "fecha_publicacion": "2026-11-15",
       "estado": "publicado",
       "categoria": "descubre",
       "dificultad": 2,
@@ -114,9 +137,24 @@
         "es": "En un modelo de lenguaje, un token es…"
       },
       "opciones": {
-        "en": ["A whole sentence", "A piece of text, often a word fragment", "A user account", "An image"],
-        "ca": ["Una frase sencera", "Un fragment de text, sovint part d'una paraula", "Un compte d'usuari", "Una imatge"],
-        "es": ["Una frase entera", "Un fragmento de texto, a menudo parte de una palabra", "Una cuenta de usuario", "Una imagen"]
+        "en": [
+          "A whole sentence",
+          "A piece of text, often a word fragment",
+          "A user account",
+          "An image"
+        ],
+        "ca": [
+          "Una frase sencera",
+          "Un fragment de text, sovint part d'una paraula",
+          "Un compte d'usuari",
+          "Una imatge"
+        ],
+        "es": [
+          "Una frase entera",
+          "Un fragmento de texto, a menudo parte de una palabra",
+          "Una cuenta de usuario",
+          "Una imagen"
+        ]
       },
       "respuesta_correcta": 1,
       "pista1": {

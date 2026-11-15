@@ -9,8 +9,9 @@ Este documento recoge lo que cualquier persona (o asistente) necesita para traba
 | Idiomas | en / ca / es con el mismo significado. Idioma inicial por `navigator.languages`, cambiable en todas las pantallas, guardado en `localStorage` (`questia.lang`). | `i18n.js`, `app.js` |
 | Paleta | Naranja profundo `#D9480F` (acciones, texto blanco encima), naranja vivo `#FF922B` (acentos, nunca como texto sobre blanco), fondo `#FFF8F0`, texto `#1F2933`, secundario `#52606D`, verde `#2F9E44` y rojo `#C92A2A` solo para acierto/error. | `styles.css` (`:root`) |
 | Navegación | **Cuatro pestañas** (aprobado 13/11/2026): Inicio, Retos (con filtros Mente / Estudio / Descubre), Vídeos, Encuesta. Rutas por hash: `#inicio`, `#retos`, `#videos`, `#encuesta`, `#reto/ID`. | `index.html`, `app.js` (`render`) |
-| Reto del día | Simulación local de la selección en servidor: solo retos con `estado: publicado` y `fecha_publicacion ≤ hoy` (Europe/Madrid). El de hoy es el que tiene fecha = hoy; si no hay, mensaje controlado. En la fase 4 el filtrado pasa a Apps Script. | `app.js` (`availableQuests`, `todaysQuest`) |
-| Modo demo | `data/quests.json` lleva `demo_relative_dates: true`: la app asigna hoy, ayer, anteayer… por orden de la lista. Se retira cuando exista el servidor. | `data/quests.json`, `app.js` (`loadCatalog`) |
+| Fuente de datos | **Google Sheets «QuestIA · contenidos»** (pestañas `quests`, `videos`, `canales`, `leeme`) servida por **Apps Script** (`apps-script/Code.gs`, web app, `?action=all|quests|videos|canales`, `&nocache=1`). El servidor filtra `estado = publicado` y `fecha ≤ hoy` (Europe/Madrid), marca `todayId`, cachea 1 h por día. La URL vive en `config.js`. | `config.js`, `apps-script/Code.gs`, `app.js` (`loadCatalog`) |
+| Carga del catálogo | 1) catálogo guardado en el dispositivo (`localStorage` `questia.catalog`) si es de hoy y tiene < 60 min: se pinta al instante y no se llama al servidor; 2) servidor (timeout 8 s): sustituye y se guarda; 3) si falla y hay caché: se muestra con aviso «sin conexión con el servidor»; 4) si falla y no hay caché: `data/quests.json` + `data/videos.json` (respaldo, con aviso). | `app.js` (`loadCatalog`, `readCachedCatalog`, `loadLocalFallback`) |
+| Reto del día | El que el servidor marca en `todayId`; si no viene, el que tiene fecha = hoy. El cliente vuelve a filtrar `fecha ≤ hoy` por seguridad. Sin reto hoy → mensaje controlado. | `app.js` (`todaysQuest`) |
 | Recorrido del reto | Enunciado → hasta 2 pistas progresivas → respuesta (opciones o texto corto) → resultado → explicación → curiosidad → fuente. | `app.js` (`renderQuest`) |
 | Progreso | En el dispositivo (`localStorage` `questia.progress`): `{solved: {ID: {date, correct}}}`. Un reto cuenta una sola vez aunque se repita. Contador y calendario mensual de días resueltos. Sin puntos, rachas ni push (aprobado 13/11/2026). | `app.js` (`markSolved`, `renderCalendar`) |
 | Accesibilidad | Enlace «saltar al contenido», foco visible, controles de mínimo 44 px, `aria-pressed` en idioma y opciones, `aria-current` en navegación, resultado como `role="status"` con foco al responder. | `index.html`, `styles.css`, `app.js` |
@@ -20,14 +21,16 @@ Este documento recoge lo que cualquier persona (o asistente) necesita para traba
 | Instalación | Tarjeta en Inicio: con `beforeinstallprompt` (Android, Chrome/Edge) muestra botón «Instalar»; en iOS/iPadOS (sin API) muestra guía de dos pasos; oculta si ya está en modo instalado; «Ahora no» la silencia 7 días (`questia.installDismissed`). | `app.js` (`setupInstall`, `renderInstallCard`) |
 | Icono | Chispa blanca de cuatro puntas con chispa menor sobre degradado naranja (aprobado 13/11/2026). | `icon.svg`, `icons/` |
 | PWA y caché | `manifest.json` con `start_url` y `scope` relativos. Service worker: página y `data/*.json` por red saltando la caché HTTP (caché propia si falla); css/js/iconos versionados con `?v=` y servidos desde caché. Al activarse una versión nueva, la página se recarga una vez (`controllerchange`). Motivo: GitHub Pages cachea 10 min por archivo y sin esto se mezclaban versiones (visto el 13/11/2026). | `manifest.json`, `service-worker.js`, `app.js` |
-| Versionado | **En cada publicación cambiar tres cosas:** `APP_VERSION` en `app.js`, `CACHE_VERSION` y la lista `APP_SHELL` en `service-worker.js`, y el sufijo `?v=` de css/js (e icono si cambia) en `index.html`. | `app.js`, `service-worker.js`, `index.html` |
+| Versionado | **En cada publicación cambiar tres cosas:** `APP_VERSION` en `app.js`, `CACHE_VERSION` y la lista `APP_SHELL` en `service-worker.js`, y el sufijo `?v=` de css/js/config (e icono si cambia) en `index.html`. | `app.js`, `service-worker.js`, `index.html` |
 
 ## Convenciones
 
 - Sin frameworks ni dependencias externas. Sin secretos en el frontend.
 - Rutas siempre relativas (`./`, `data/…`) porque la app vive en un subdirectorio (`/questia/`).
 - Todo texto visible pasa por `data-i18n="clave"` (HTML estático) o `t("clave")` (generado); las claves se añaden a los tres idiomas a la vez en `i18n.js`. Los textos de contenido se leen con `tc({en, ca, es})`.
-- `data/quests.json`: `respuesta_correcta` es el índice (desde 0) dentro de `opciones`; para `tipo: "respuesta corta"` es un objeto `{en, ca, es}` que se compara sin mayúsculas ni acentos.
+- Formato de un reto (servidor y `data/quests.json`): `respuesta_correcta` es el índice (desde 0) dentro de `opciones`; para `tipo: "respuesta corta"` es un objeto `{en, ca, es}` que se compara sin mayúsculas ni acentos. En la hoja, `opciones_xx` se escriben separadas por ` | `.
+- Publicar contenido nuevo: fila en la hoja con `estado = publicado` y fecha ≤ hoy; aparece en la app en menos de una hora (caché del servidor) + hasta una hora (caché del dispositivo). Para verlo al instante: `…/exec?action=all&nocache=1` y borrar `questia.catalog` en el dispositivo.
+- Redesplegar el Apps Script tras cambiar `Code.gs`: Implementar → Gestionar implementaciones → lápiz → Versión «Nueva» → Implementar (la URL se mantiene si se edita la implementación existente).
 - El DOM se construye con el helper `el(tag, attrs, children)`; nunca con HTML concatenado a partir de contenido.
 - El archivo `.nojekyll` evita que GitHub Pages procese el sitio con Jekyll.
 
@@ -40,6 +43,8 @@ Este documento recoge lo que cualquier persona (o asistente) necesita para traba
 5. Para forzar una actualización: cerrar todas las pestañas de la app y volver a abrir; si no, borrar datos del sitio.
 
 ## Historial de fases
+
+- **Fase 4 — Catálogo de contenidos, entrega 1 (v0.4.0, 15/11/2026):** hoja de Google creada, Apps Script desplegado, app conectada con caché en dispositivo y respaldo local. Pendiente: 30 retos revisados, lista de canales, ilustraciones por categoría.
 
 - **Fase 2 — Entorno (cerrada el 13/11/2026):** archivos base publicados en GitHub Pages y verificados (v0.2.0).
 - **Fase 3 — Prototipo de frontend, entrega 1 (v0.3.0, parche v0.3.1):** Inicio con reto del día, recorrido completo del reto, progreso con calendario, navegación definitiva de cuatro pestañas (Retos, Vídeos y Encuesta como «próximamente»), icono definitivo.
