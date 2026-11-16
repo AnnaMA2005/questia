@@ -20,7 +20,7 @@ window.QUESTIA_CONFIG = {
            "modal" = modal al abrir la app desde la primera visita (se puede cerrar).
      Los límites se aplican en los dos modos. SIGNATURE: nombre y universidad de la autora, si decide firmar. */
   REMINDERS: {
-    MODE: "mix",
+    MODE: "modal",
     MIN_DAYS_BETWEEN: 3,
     MAX_TOTAL: 5,
     DISMISS_DAYS: 7,
