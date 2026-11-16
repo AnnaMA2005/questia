@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  var APP_VERSION = "0.4.1";
+  var APP_VERSION = "0.5.0";
   var STORAGE_LANG = "questia.lang";
   var STORAGE_PROGRESS = "questia.progress";
   var STORAGE_INSTALL_DISMISSED = "questia.installDismissed";
@@ -191,6 +191,7 @@
     videos.loaded = true;
     videos.error = false;
     channels.items = Array.isArray(json.canales) ? json.canales.filter(function (c) { return c.url; }) : [];
+    if (window.QuestIA && window.QuestIA.survey) window.QuestIA.survey.setQuestions(json.survey || []);
     source.kind = kind;
     source.stale = false;
     render();
@@ -666,6 +667,16 @@
     return until > Date.now();
   }
 
+  /* Tarjeta de la encuesta en Inicio: se oculta cuando el servidor ha confirmado la participación. */
+  function renderSurveyCard() {
+    var card = document.getElementById("survey-card");
+    var sv = window.QuestIA.survey;
+    if (!card || !sv) return;
+    card.hidden = sv.isConfirmed();
+    var cta = card.querySelector("[data-i18n='surveyCardCta']");
+    if (cta) cta.textContent = sv.hasDraft() ? t("surveyContinue") : t("surveyCardCta");
+  }
+
   function renderInstallCard() {
     var card = document.getElementById("install-card");
     if (!card) return;
@@ -733,6 +744,8 @@
     if (route.view === "retos") renderQuestsTab();
     if (route.view === "videos") renderVideos();
     if (route.view === "reto") renderQuest(route.param);
+    if (route.view === "encuesta" && window.QuestIA.survey) window.QuestIA.survey.render();
+    renderSurveyCard();
     document.getElementById("app-version").textContent = "QuestIA v" + APP_VERSION;
   }
 
@@ -765,6 +778,21 @@
   }
 
   /* =========================================================
+     Espacio compartido con los módulos (survey.js, …)
+     ========================================================= */
+
+  window.QuestIA = {
+    version: APP_VERSION,
+    config: CONFIG,
+    t: t, tc: tc, el: el, clear: clear,
+    storageGet: storageGet, storageSet: storageSet,
+    lang: function () { return currentLang; },
+    isStandalone: isStandalone,
+    todayISO: todayISO,
+    render: render
+  };
+
+  /* =========================================================
      Arranque
      ========================================================= */
 
@@ -777,6 +805,7 @@
     applyLang(detectLang());
     loadCatalog();
     registerServiceWorker();
+    setTimeout(function () { if (window.QuestIA.survey) window.QuestIA.survey.sync(); }, 0);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

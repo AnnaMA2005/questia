@@ -14,6 +14,7 @@ index.html            Página principal (shell de la app)
 styles.css            Estilos base y paleta
 app.js                Idioma, service worker y comprobaciones de entorno
 i18n.js               Textos de interfaz en en / ca / es
+survey.js             Motor de encuesta y estado de participación
 config.js             URL del backend y tiempos de caché (sin secretos)
 apps-script/Code.gs   Código del backend (se pega en el editor de Apps Script de la hoja)
 manifest.json         Manifiesto PWA
@@ -38,4 +39,4 @@ y abrir http://localhost:8080/ en el navegador. El service worker solo se regist
 
 ## Estado
 
-Fase 4, entrega 2 (v0.4.1): catálogo desde la hoja de Google vía Apps Script, ilustraciones por categoría y sección de canales recomendados. Siguiente: 30 retos revisados.
+Fase 5, entrega 1 (v0.5.0): encuesta configurable desde la hoja, envío con validación y confirmación de participación. Siguiente: recordatorios, métricas, resto de retos.
