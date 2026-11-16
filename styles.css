@@ -314,3 +314,14 @@ p:last-child { margin-bottom: 0; }
 .option-multi[aria-pressed="true"]::before { content: "☑ "; color: var(--color-primary); }
 .notice-error { color: var(--color-error); background: var(--color-error-soft); }
 .survey-actions { justify-content: space-between; }
+
+/* ---------- Recordatorios de la encuesta ---------- */
+.reminder { display: grid; gap: 8px; }
+.reminder-text { margin: 0; font-size: 1.02rem; }
+.reminder-inline { padding: 14px 16px; background: linear-gradient(135deg, #FFF3E6, #FFFFFF); border: 2px solid var(--color-accent-soft); border-radius: var(--radius-sm); }
+.reminder-inline .actions { margin-top: 6px; }
+.reminder-overlay { position: fixed; left: 0; right: 0; z-index: 50; display: flex; justify-content: center; padding: 12px; }
+.reminder-overlay.is-banner { bottom: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px)); }
+.reminder-overlay.is-modal { top: 0; bottom: 0; align-items: center; background: rgba(31, 41, 51, 0.45); }
+.reminder-float { width: 100%; max-width: 480px; background: var(--color-card); border-radius: var(--radius); box-shadow: 0 8px 30px rgba(31, 41, 51, 0.25); padding: 20px; }
+.reminder-float .actions { margin-top: 8px; }

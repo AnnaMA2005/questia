@@ -4,19 +4,21 @@
 
    Estrategia:
    - Navegaciones (index.html): red primero SALTANDO la caché HTTP del navegador; si falla, caché.
-   - data/*.json: red primero saltando la caché HTTP; si falla, caché (último catálogo recibido).
+   - data/*.json y config.js: red primero saltando la caché HTTP; si falla, caché. (config.js así se puede
+     editar en GitHub sin publicar versión nueva; tarda hasta 10 min por la caché de GitHub Pages.)
    - Resto de recursos propios (css, js, iconos, versionados con ?v=): caché primero; si no están, red.
    Cuando se instala una versión nueva, toma el control enseguida y la app se recarga una vez. */
 
-var CACHE_VERSION = "questia-v0.5.0";
+var CACHE_VERSION = "questia-v0.5.1";
 var APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=0.5.0",
-  "./app.js?v=0.5.0",
-  "./i18n.js?v=0.5.0",
-  "./config.js?v=0.5.0",
-  "./survey.js?v=0.5.0",
+  "./styles.css?v=0.5.1",
+  "./app.js?v=0.5.1",
+  "./i18n.js?v=0.5.1",
+  "./config.js?v=0.5.1",
+  "./survey.js?v=0.5.1",
+  "./reminders.js?v=0.5.1",
   "./manifest.json",
   "./icon.svg?v=2",
   "./icons/icon-192.png",
@@ -59,7 +61,7 @@ self.addEventListener("fetch", function (event) {
   if (url.origin !== self.location.origin) return;
 
   var isNavigation = req.mode === "navigate";
-  var isData = url.pathname.indexOf("/data/") !== -1;
+  var isData = url.pathname.indexOf("/data/") !== -1 || /\/config\.js$/.test(url.pathname);
 
   if (isNavigation || isData) {
     event.respondWith(

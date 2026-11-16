@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  var APP_VERSION = "0.5.0";
+  var APP_VERSION = "0.5.1";
   var STORAGE_LANG = "questia.lang";
   var STORAGE_PROGRESS = "questia.progress";
   var STORAGE_INSTALL_DISMISSED = "questia.installDismissed";
@@ -482,6 +482,9 @@
     if (q.fuente) { explain.appendChild(el("p", { class: "source", text: t("sourceLabel") + ": " + q.fuente })); }
     card.appendChild(explain);
 
+    var rem = window.QuestIA.reminders ? window.QuestIA.reminders.afterQuestCard(q.id) : null;
+    if (rem) card.appendChild(rem);
+
     card.appendChild(el("div", { class: "actions" }, [
       el("a", { class: "btn btn-primary btn-block", href: "#inicio", text: t("finishBtn") })
     ]));
@@ -667,6 +670,17 @@
     return until > Date.now();
   }
 
+  /* Recordatorio arriba de Inicio (modo mix, segunda sesión en adelante). */
+  function renderReminderTop(visible) {
+    var slot = document.getElementById("reminder-top");
+    if (!slot) return;
+    clear(slot);
+    if (!visible) return;                      // solo cuenta como mostrado si Inicio está en pantalla
+    var r = window.QuestIA.reminders;
+    var card = r ? r.homeCard() : null;
+    if (card) slot.appendChild(card);
+  }
+
   /* Tarjeta de la encuesta en Inicio: se oculta cuando el servidor ha confirmado la participación. */
   function renderSurveyCard() {
     var card = document.getElementById("survey-card");
@@ -741,6 +755,7 @@
     renderProgress();
     renderPrevious();
     renderInstallCard();
+    renderReminderTop(route.view === "inicio");
     if (route.view === "retos") renderQuestsTab();
     if (route.view === "videos") renderVideos();
     if (route.view === "reto") renderQuest(route.param);
@@ -789,6 +804,8 @@
     lang: function () { return currentLang; },
     isStandalone: isStandalone,
     todayISO: todayISO,
+    solvedCount: solvedCount,
+    questAnswered: function () { return !!questState.answered; },
     render: render
   };
 
@@ -805,7 +822,10 @@
     applyLang(detectLang());
     loadCatalog();
     registerServiceWorker();
-    setTimeout(function () { if (window.QuestIA.survey) window.QuestIA.survey.sync(); }, 0);
+    setTimeout(function () {
+      if (window.QuestIA.survey) window.QuestIA.survey.sync();
+      if (window.QuestIA.reminders) window.QuestIA.reminders.onSessionStart();
+    }, 0);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
